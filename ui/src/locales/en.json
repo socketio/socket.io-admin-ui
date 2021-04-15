@@ -1,0 +1,82 @@
+{
+  "separator": ": ",
+  "id": "ID",
+  "update": "Update",
+  "details": "Details",
+  "actions": "Actions",
+  "select-namespace": "Select namespace",
+  "namespace": "Namespace",
+  "namespaces": "Namespaces",
+  "disconnect": "Disconnect",
+  "name": "Name",
+  "value": "Value",
+  "type": "Type",
+  "status": "Status",
+  "connected": "connected",
+  "disconnected": "disconnected",
+  "connection": {
+    "title": "Connection",
+    "serverUrl": "Server URL",
+    "username": "Username",
+    "password": "Password",
+    "connect": "Connect",
+    "invalid-credentials": "Invalid credentials",
+    "error": "Error"
+  },
+  "dashboard": {
+    "title": "Dashboard"
+  },
+  "sockets": {
+    "title": "Sockets",
+    "details": "Socket details",
+    "address": "IP address",
+    "transport": "Transport",
+    "disconnect": "Disconnect this Socket instance",
+    "displayDetails": "Display the details of this Socket instance",
+    "client": "Client",
+    "socket": "Socket",
+    "creation-date": "Creation date",
+    "leave": "Leave this room",
+    "join": "Join",
+    "join-a-room": "Join a room",
+    "initial-request": "Initial HTTP request",
+    "headers": "Headers",
+    "query-params": "Query parameters"
+  },
+  "rooms": {
+    "title": "Rooms",
+    "details": "Room details",
+    "active": "Active",
+    "deleted": "Deleted",
+    "public": "Public",
+    "private": "Private",
+    "show-private": "Show private rooms?",
+    "sockets-count": "# of sockets",
+    "clear": "Remove all the Socket instances from this room",
+    "leave": "Remove the Socket instance from this room",
+    "disconnect": "Disconnect all the Socket instances that are in this room",
+    "displayDetails": "Display the details of this room"
+  },
+  "clients": {
+    "title": "Clients",
+    "details": "Client details",
+    "sockets-count": "# of sockets",
+    "disconnect": "Disconnect this client (and all attached Socket instances)",
+    "displayDetails": "Display the details of this client"
+  },
+  "servers": {
+    "title": "Servers",
+    "hostname": "Hostname",
+    "pid": "PID",
+    "uptime": "Uptime",
+    "clients-count": "# of clients",
+    "last-ping": "Last ping",
+    "healthy": "Healthy",
+    "unhealthy": "Unhealthy"
+  },
+  "config": {
+    "language": "Language",
+    "readonly": "Read-only?",
+    "dark-theme": "Dark theme?"
+  }
+}
