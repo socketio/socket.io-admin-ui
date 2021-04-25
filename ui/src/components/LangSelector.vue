@@ -25,6 +25,10 @@ export default {
           text: "Français",
           value: "fr",
         },
+        {
+          text: "简体中文",
+          value: "zh-CN",
+        },
       ],
     };
   },
