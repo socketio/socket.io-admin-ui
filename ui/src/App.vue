@@ -92,6 +92,7 @@ export default {
         forceNew: true,
         reconnection: false,
         auth,
+        transports: ["websocket", "polling"],
       });
       socket.once("connect", () => {
         this.showConnectionModal = false;
@@ -156,6 +157,7 @@ export default {
       this.tryConnect(form.serverUrl, {
         username: form.username,
         password: form.password,
+        transport: form.transport,
       });
     },
   },
