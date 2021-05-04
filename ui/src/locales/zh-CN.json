@@ -1,0 +1,82 @@
+{
+  "separator": ": ",
+  "id": "ID",
+  "update": "更新",
+  "details": "详情",
+  "actions": "Actions",
+  "select-namespace": "选择 Namespace",
+  "namespace": "Namespace",
+  "namespaces": "Namespaces",
+  "disconnect": "断开连接",
+  "name": "名称",
+  "value": "值",
+  "type": "类型",
+  "status": "状态",
+  "connected": "已连接",
+  "disconnected": "未连接",
+  "connection": {
+    "title": "连接",
+    "serverUrl": "服务器 URL",
+    "username": "用户名",
+    "password": "密码",
+    "connect": "提交",
+    "invalid-credentials": "无效的密钥",
+    "error": "错误"
+  },
+  "dashboard": {
+    "title": "状态面板"
+  },
+  "sockets": {
+    "title": "Sockets",
+    "details": "Socket 详情",
+    "address": "IP 地址",
+    "transport": "协议",
+    "disconnect": "与该 Socket 实例断开连接",
+    "displayDetails": "显示该 Socket 实例详情",
+    "client": "客户端",
+    "socket": "Socket",
+    "creation-date": "创建时间",
+    "leave": "离开房间",
+    "join": "加入",
+    "join-a-room": "加入房间",
+    "initial-request": "初始 HTTP 请求",
+    "headers": "Headers",
+    "query-params": "查询参数"
+  },
+  "rooms": {
+    "title": "房间",
+    "details": "房间 详情",
+    "active": "活跃",
+    "deleted": "已删除",
+    "public": "公开",
+    "private": "私有",
+    "show-private": "显示私人房间？",
+    "sockets-count": "Sockets 数量",
+    "clear": "从此房间移除所有 Socket 实例",
+    "leave": "从该房间移除此 Socket 实例",
+    "disconnect": "与此房间内所有 Socket 实例断开连接",
+    "displayDetails": "显示此房间详情"
+  },
+  "clients": {
+    "title": "客户端",
+    "details": "客户端详情",
+    "sockets-count": "Sockets 数量",
+    "disconnect": "与该客户端断开连接",
+    "displayDetails": "显示该客户端详情"
+  },
+  "servers": {
+    "title": "服务器",
+    "hostname": "Hostname",
+    "pid": "PID",
+    "uptime": "已经运行",
+    "clients-count": "客户端数量",
+    "last-ping": "上次 ping",
+    "healthy": "健康",
+    "unhealthy": "不健康"
+  },
+  "config": {
+    "language": "语言",
+    "readonly": "只读",
+    "dark-theme": "夜间模式"
+  }
+}
