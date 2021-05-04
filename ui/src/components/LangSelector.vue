@@ -26,6 +26,10 @@ export default {
           value: "fr",
         },
         {
+          text: "한국어",
+          value: "ko",
+        },
+        {
           text: "简体中文",
           value: "zh-CN",
         },

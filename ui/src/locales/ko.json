@@ -1,0 +1,82 @@
+{
+  "separator": ": ",
+  "id": "ID",
+  "update": "업데이트",
+  "details": "상세정보",
+  "actions": "액션",
+  "select-namespace": "네임 스페이스 선택",
+  "namespace": "네임 스페이스",
+  "namespaces": "네임 스페이스",
+  "disconnect": "연결 끊기",
+  "name": "이름",
+  "value": "값",
+  "type": "타입",
+  "status": "상태",
+  "connected": "연결됨",
+  "disconnected": "연결되지 않음",
+  "connection": {
+    "title": "접속",
+    "serverUrl": "서버 URL",
+    "username": "유저 이름 (Username)",
+    "password": "비밀번호 (Password)",
+    "connect": "접속하기",
+    "invalid-credentials": "올바르지 않은 인증",
+    "error": "에러"
+  },
+  "dashboard": {
+    "title": "대시보드"
+  },
+  "sockets": {
+    "title": "소켓",
+    "details": "소켓 상세정보",
+    "address": "IP 주소",
+    "transport": "통신 방식 (Transport)",
+    "disconnect": "소켓 인스턴스 연결 끊기",
+    "displayDetails": "소켓 인스턴스 상세정보",
+    "client": "클라이언트",
+    "socket": "소켓",
+    "creation-date": "생성일",
+    "leave": "룸 떠나기",
+    "join": "참여",
+    "join-a-room": "룸에 참여",
+    "initial-request": "초기 HTTP 요청",
+    "headers": "헤더",
+    "query-params": "쿼리 파라미터"
+  },
+  "rooms": {
+    "title": "룸",
+    "details": "룸 상세정보",
+    "active": "활성화",
+    "deleted": "삭제됨",
+    "public": "Public",
+    "private": "Private",
+    "show-private": "프라이빗(Private) 룸 보기?",
+    "sockets-count": "소켓 수",
+    "clear": "룸에서 모든 소켓 인스턴스 제거",
+    "leave": "룸에서 소켓 인스턴스 제거",
+    "disconnect": "룸의 모든 소켓 인스턴스 연결 끊기",
+    "displayDetails": "룸 상세정보"
+  },
+  "clients": {
+    "title": "클라이언트",
+    "details": "클라언트 상세정보",
+    "sockets-count": "소켓 수",
+    "disconnect": "클라이언트 연결 끊기 (연결된 모든 소켓 인스턴스 끊기)",
+    "displayDetails": "클라이언트 상세정보"
+  },
+  "servers": {
+    "title": "서버",
+    "hostname": "호스트이름",
+    "pid": "PID",
+    "uptime": "가동 시간",
+    "clients-count": "클라이언트 수",
+    "last-ping": "마지막 ping",
+    "healthy": "Healthy",
+    "unhealthy": "Unhealthy"
+  },
+  "config": {
+    "language": "언어",
+    "readonly": "읽기 전용?",
+    "dark-theme": "다크 테마?"
+  }
+}
