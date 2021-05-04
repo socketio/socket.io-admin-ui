@@ -157,7 +157,6 @@ export default {
       this.tryConnect(form.serverUrl, {
         username: form.username,
         password: form.password,
-        transport: form.transport,
       });
     },
   },
