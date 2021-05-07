@@ -91,6 +91,7 @@ export default {
       const socket = io(serverUrl, {
         forceNew: true,
         reconnection: false,
+        withCredentials: true, // needed for cookie-based sticky-sessions
         auth,
       });
       socket.once("connect", () => {
