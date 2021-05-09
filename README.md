@@ -37,7 +37,8 @@ const httpServer = createServer();
 
 const io = new Server(httpServer, {
   cors: {
-    origin: ["https://admin.socket.io"]
+    origin: ["https://admin.socket.io"],
+    credentials: true // needed for cookie-based sticky sessions, else you can ignore this line
   }
 });
 
