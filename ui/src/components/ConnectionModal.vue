@@ -25,6 +25,13 @@
             type="password"
           ></v-text-field>
 
+          <v-switch
+            v-model="wsOnly"
+            :label="$t('connection.websocket-only')"
+            inset
+            dense
+          />
+
           <v-btn
             :loading="isConnecting"
             :disabled="isConnecting || !isValid"
@@ -49,12 +56,14 @@ export default {
     isOpen: Boolean,
     isConnecting: Boolean,
     initialServerUrl: String,
+    initialWsOnly: Boolean,
     error: String,
   },
 
   data() {
     return {
       serverUrl: this.initialServerUrl,
+      wsOnly: this.initialWsOnly,
       username: "",
       password: "",
     };
@@ -75,6 +84,7 @@ export default {
     onSubmit() {
       this.$emit("submit", {
         serverUrl: this.serverUrl,
+        wsOnly: this.wsOnly,
         username: this.username,
         password: this.password,
       });

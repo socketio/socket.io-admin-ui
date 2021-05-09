@@ -15,6 +15,7 @@
     <ConnectionModal
       :is-open="showConnectionModal"
       :initial-server-url="serverUrl"
+      :initial-ws-only="wsOnly"
       :is-connecting="isConnecting"
       :error="connectionError"
       @submit="onSubmit"
@@ -59,6 +60,7 @@ export default {
   computed: {
     ...mapState({
       serverUrl: (state) => state.connection.serverUrl,
+      wsOnly: (state) => state.connection.wsOnly,
       backgroundColor: (state) =>
         state.config.darkTheme ? "" : "grey lighten-5",
     }),
@@ -80,7 +82,7 @@ export default {
   },
 
   methods: {
-    tryConnect(serverUrl, auth) {
+    tryConnect(serverUrl, auth, wsOnly) {
       this.isConnecting = true;
       if (SocketHolder.socket) {
         SocketHolder.socket.disconnect();
@@ -92,6 +94,7 @@ export default {
         forceNew: true,
         reconnection: false,
         withCredentials: true, // needed for cookie-based sticky-sessions
+        transports: wsOnly ? ["websocket"] : ["polling", "websocket"],
         auth,
       });
       socket.once("connect", () => {
@@ -100,7 +103,7 @@ export default {
         this.isConnecting = false;
 
         socket.io.reconnection(true);
-        this.$store.commit("connection/saveServerUrl", serverUrl);
+        this.$store.commit("connection/saveConfig", { serverUrl, wsOnly });
         SocketHolder.socket = socket;
         this.registerEventListeners(socket);
       });
@@ -154,10 +157,14 @@ export default {
     },
 
     onSubmit(form) {
-      this.tryConnect(form.serverUrl, {
-        username: form.username,
-        password: form.password,
-      });
+      this.tryConnect(
+        form.serverUrl,
+        {
+          username: form.username,
+          password: form.password,
+        },
+        form.wsOnly
+      );
     },
   },
 
@@ -166,9 +173,14 @@ export default {
 
     if (this.serverUrl) {
       const sessionId = this.$store.state.connection.sessionId;
-      this.tryConnect(this.serverUrl, {
-        sessionId,
-      });
+      const wsOnly = this.$store.state.connection.wsOnly;
+      this.tryConnect(
+        this.serverUrl,
+        {
+          sessionId,
+        },
+        wsOnly
+      );
     } else {
       this.showConnectionModal = true;
     }

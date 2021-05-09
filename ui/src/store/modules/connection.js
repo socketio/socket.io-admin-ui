@@ -4,6 +4,7 @@ export default {
   namespaced: true,
   state: {
     serverUrl: "",
+    wsOnly: false,
     sessionId: "",
     connected: false,
   },
@@ -11,13 +12,16 @@ export default {
     init(state) {
       if (isLocalStorageAvailable) {
         state.serverUrl = localStorage.getItem("server_url");
+        state.wsOnly = localStorage.getItem("ws_only") === "true";
         state.sessionId = localStorage.getItem("session_id");
       }
     },
-    saveServerUrl(state, serverUrl) {
+    saveConfig(state, { serverUrl, wsOnly }) {
       state.serverUrl = serverUrl;
+      state.wsOnly = wsOnly;
       if (isLocalStorageAvailable) {
         localStorage.setItem("server_url", serverUrl);
+        localStorage.setItem("ws_only", wsOnly);
       }
     },
     saveSessionId(state, sessionId) {

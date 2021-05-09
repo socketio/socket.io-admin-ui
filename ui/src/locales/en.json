@@ -21,7 +21,8 @@
     "password": "Password",
     "connect": "Connect",
     "invalid-credentials": "Invalid credentials",
-    "error": "Error"
+    "error": "Error",
+    "websocket-only": "WebSocket only?"
   },
   "dashboard": {
     "title": "Dashboard"
