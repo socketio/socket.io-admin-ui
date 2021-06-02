@@ -1,3 +1,14 @@
+## [0.1.2](https://github.com/socketio/socket.io-admin-ui/compare/0.1.1...0.1.2) (2021-06-02)
+
+
+### Bug Fixes
+
+* **server:** add support for dynamic namespaces ([74f1c20](https://github.com/socketio/socket.io-admin-ui/commit/74f1c20f6ad878c3d11c5fc80dd8d12ee02d7bfb))
+* **server:** only serialize required handshake attributes ([1cf991e](https://github.com/socketio/socket.io-admin-ui/commit/1cf991e49a1e2b172acca40ca3d259dad9c22915))
+* **ui:** allow to specify the connection path ([7ad384d](https://github.com/socketio/socket.io-admin-ui/commit/7ad384dd3485b8500217a489f8a376d2641d81e0))
+
+
+
 ## [0.1.1](https://github.com/socketio/socket.io-admin-ui/compare/0.1.0...0.1.1) (2021-05-09)
 
 
