@@ -22,7 +22,8 @@
     "connect": "Se connecter",
     "invalid-credentials": "Identifiants invalides",
     "error": "Erreur",
-    "websocket-only": "WebSocket uniquement ?"
+    "websocket-only": "WebSocket uniquement ?",
+    "path": "Chemin HTTP"
   },
   "dashboard": {
     "title": "Accueil"

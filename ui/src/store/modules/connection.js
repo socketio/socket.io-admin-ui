@@ -5,6 +5,7 @@ export default {
   state: {
     serverUrl: "",
     wsOnly: false,
+    path: "/socket.io",
     sessionId: "",
     connected: false,
   },
@@ -14,14 +15,17 @@ export default {
         state.serverUrl = localStorage.getItem("server_url");
         state.wsOnly = localStorage.getItem("ws_only") === "true";
         state.sessionId = localStorage.getItem("session_id");
+        state.path = localStorage.getItem("path") || "/socket.io";
       }
     },
-    saveConfig(state, { serverUrl, wsOnly }) {
+    saveConfig(state, { serverUrl, wsOnly, path }) {
       state.serverUrl = serverUrl;
       state.wsOnly = wsOnly;
+      state.path = path;
       if (isLocalStorageAvailable) {
         localStorage.setItem("server_url", serverUrl);
         localStorage.setItem("ws_only", wsOnly);
+        localStorage.setItem("path", path);
       }
     },
     saveSessionId(state, sessionId) {

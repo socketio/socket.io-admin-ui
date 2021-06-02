@@ -32,6 +32,11 @@
             dense
           />
 
+          <v-text-field
+            v-model="path"
+            :label="$t('connection.path')"
+          ></v-text-field>
+
           <v-btn
             :loading="isConnecting"
             :disabled="isConnecting || !isValid"
@@ -57,6 +62,7 @@ export default {
     isConnecting: Boolean,
     initialServerUrl: String,
     initialWsOnly: Boolean,
+    initialPath: String,
     error: String,
   },
 
@@ -64,6 +70,7 @@ export default {
     return {
       serverUrl: this.initialServerUrl,
       wsOnly: this.initialWsOnly,
+      path: this.initialPath,
       username: "",
       password: "",
     };
@@ -85,6 +92,7 @@ export default {
       this.$emit("submit", {
         serverUrl: this.serverUrl,
         wsOnly: this.wsOnly,
+        path: this.path,
         username: this.username,
         password: this.password,
       });

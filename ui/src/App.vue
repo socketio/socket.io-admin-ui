@@ -16,6 +16,7 @@
       :is-open="showConnectionModal"
       :initial-server-url="serverUrl"
       :initial-ws-only="wsOnly"
+      :initial-path="path"
       :is-connecting="isConnecting"
       :error="connectionError"
       @submit="onSubmit"
@@ -61,6 +62,7 @@ export default {
     ...mapState({
       serverUrl: (state) => state.connection.serverUrl,
       wsOnly: (state) => state.connection.wsOnly,
+      path: (state) => state.connection.path,
       backgroundColor: (state) =>
         state.config.darkTheme ? "" : "grey lighten-5",
     }),
@@ -82,7 +84,7 @@ export default {
   },
 
   methods: {
-    tryConnect(serverUrl, auth, wsOnly) {
+    tryConnect(serverUrl, auth, wsOnly, path) {
       this.isConnecting = true;
       if (SocketHolder.socket) {
         SocketHolder.socket.disconnect();
@@ -95,6 +97,7 @@ export default {
         reconnection: false,
         withCredentials: true, // needed for cookie-based sticky-sessions
         transports: wsOnly ? ["websocket"] : ["polling", "websocket"],
+        path,
         auth,
       });
       socket.once("connect", () => {
@@ -103,7 +106,11 @@ export default {
         this.isConnecting = false;
 
         socket.io.reconnection(true);
-        this.$store.commit("connection/saveConfig", { serverUrl, wsOnly });
+        this.$store.commit("connection/saveConfig", {
+          serverUrl,
+          wsOnly,
+          path,
+        });
         SocketHolder.socket = socket;
         this.registerEventListeners(socket);
       });
@@ -163,7 +170,8 @@ export default {
           username: form.username,
           password: form.password,
         },
-        form.wsOnly
+        form.wsOnly,
+        form.path
       );
     },
   },
@@ -173,13 +181,13 @@ export default {
 
     if (this.serverUrl) {
       const sessionId = this.$store.state.connection.sessionId;
-      const wsOnly = this.$store.state.connection.wsOnly;
       this.tryConnect(
         this.serverUrl,
         {
           sessionId,
         },
-        wsOnly
+        this.wsOnly,
+        this.path
       );
     } else {
       this.showConnectionModal = true;
