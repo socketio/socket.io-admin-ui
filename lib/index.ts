@@ -346,7 +346,17 @@ const serialize = (
     clientId,
     transport,
     nsp,
-    handshake: socket.handshake,
+    handshake: {
+      address: socket.handshake.address,
+      headers: socket.handshake.headers,
+      query: socket.handshake.query,
+      issued: socket.handshake.issued,
+      secure: socket.handshake.secure,
+      time: socket.handshake.time,
+      url: socket.handshake.url,
+      xdomain: socket.handshake.xdomain,
+      // ignore auth and other attributes like sessionStore
+    },
     rooms: [...socket.rooms],
   };
 };

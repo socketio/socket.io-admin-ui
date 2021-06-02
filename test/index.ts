@@ -262,7 +262,16 @@ describe("Socket.IO Admin (server instrumentation)", () => {
 
         expect(socket.id).to.eql(serverSocket.id);
         expect(socket.nsp).to.eql("/");
-        expect(socket.handshake).to.eql(serverSocket.handshake);
+        expect(socket.handshake).to.eql({
+          address: serverSocket.handshake.address,
+          headers: serverSocket.handshake.headers,
+          query: serverSocket.handshake.query,
+          issued: serverSocket.handshake.issued,
+          secure: serverSocket.handshake.secure,
+          time: serverSocket.handshake.time,
+          url: serverSocket.handshake.url,
+          xdomain: serverSocket.handshake.xdomain,
+        });
         expect(socket.rooms).to.eql([...serverSocket.rooms]);
 
         // join
