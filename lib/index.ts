@@ -397,6 +397,7 @@ export function instrument(io: Server, opts: Partial<InstrumentOptions>) {
   });
 
   io._nsps.forEach((nsp) => registerListeners(adminNamespace, nsp));
+  io.on("new_namespace", (nsp) => registerListeners(adminNamespace, nsp));
 }
 
 export { InMemoryStore, RedisStore } from "./stores";

@@ -336,6 +336,31 @@ describe("Socket.IO Admin (server instrumentation)", () => {
 
         adminSocket.disconnect();
       });
+
+      it("supports dynamic namespaces", async function () {
+        // requires `socket.io>=4.1.0` with the "new_namespace" event
+        if (version === "v3") {
+          return this.skip();
+        }
+        instrument(io, {
+          auth: false,
+        });
+
+        io.of(/\/dynamic-\d+/);
+
+        const adminSocket = ioc(`http://localhost:${port}/admin`);
+        await waitFor(adminSocket, "connect");
+
+        const clientSocket = ioc(`http://localhost:${port}/dynamic-101`, {
+          forceNew: true,
+        });
+
+        const socket = await waitFor(adminSocket, "socket_connected");
+
+        expect(socket.nsp).to.eql("/dynamic-101");
+        clientSocket.disconnect();
+        adminSocket.disconnect();
+      });
     });
   });
 
