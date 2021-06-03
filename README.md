@@ -121,7 +121,7 @@ The name of the namespace which will be created to handle the administrative tas
 
 ```js
 instrument(io, {
-  namespaceName: "custom"
+  namespaceName: "/custom"
 });
 ```
 
