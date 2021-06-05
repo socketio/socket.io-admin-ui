@@ -26,6 +26,10 @@ export default {
           value: "fr",
         },
         {
+          text: "Português (Brazil)",
+          value: "pt-BR",
+        },
+        {
           text: "한국어",
           value: "ko",
         },
