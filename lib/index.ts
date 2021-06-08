@@ -347,7 +347,7 @@ const serialize = (
     transport,
     nsp,
     handshake: {
-      address: socket.handshake.address,
+      address: socket.handshake.headers["cf-connecting-ip"] || socket.handshake.headers["x-forwarded-for"] || socket.handshake.address,
       headers: socket.handshake.headers,
       query: socket.handshake.query,
       issued: socket.handshake.issued,
