@@ -1,0 +1,84 @@
+{
+  "separator": ": ",
+  "id": "ID",
+  "update": "Atualizar",
+  "details": "Detalhes",
+  "actions": "Ações",
+  "select-namespace": "Selecione o e",
+  "namespace": "Espaço de nome",
+  "namespaces": "Espaço de nomes",
+  "disconnect": "Desconectar",
+  "name": "Nome",
+  "value": "Valor",
+  "type": "Tipo",
+  "status": "Status",
+  "connected": "conectado",
+  "disconnected": "desconectado",
+  "connection": {
+    "title": "Conexão",
+    "serverUrl": "URL do Servidor",
+    "username": "Usuário",
+    "password": "Senha",
+    "connect": "Conectar",
+    "invalid-credentials": "Credenciais inválidas",
+    "error": "Error",
+    "websocket-only": "Apenas WebSocket?",
+    "path": "Caminho"
+  },
+  "dashboard": {
+    "title": "Dashboard"
+  },
+  "sockets": {
+    "title": "Sockets",
+    "details": "Detalhes do Socket",
+    "address": "Endereço IP",
+    "transport": "Transporte",
+    "disconnect": "Desconectar esta instância",
+    "displayDetails": "Exibir os detalhes desta instância",
+    "client": "Cliente",
+    "socket": "Socket",
+    "creation-date": "Data de criação",
+    "leave": "Saia desta sala",
+    "join": "Entrar",
+    "join-a-room": "Entrar em uma sala",
+    "initial-request": "Solicitação HTTP inicial",
+    "headers": "Cabeçalhos",
+    "query-params": "Parâmetros de consulta"
+  },
+  "rooms": {
+    "title": "Salas",
+    "details": "Detalhes da sala",
+    "active": "Ativa",
+    "deleted": "Deletada",
+    "public": "Pública",
+    "private": "Privada",
+    "show-private": "Mostrar salas privadas?",
+    "sockets-count": "# de sockets",
+    "clear": "Remover todas as instâncias de Socket desta sala",
+    "leave": "Remover a instância de Socket desta sala",
+    "disconnect": "Desconecte todas as instâncias de Socket que estão nesta sala",
+    "displayDetails": "Exibir os detalhes desta sala"
+  },
+  "clients": {
+    "title": "Clientes",
+    "details": "Detalhes do cliente",
+    "sockets-count": "# de sockets",
+    "disconnect": "Desconecte este cliente (e todas as instâncias anexadas)",
+    "displayDetails": "Mostrar os detalhes deste cliente"
+  },
+  "servers": {
+    "title": "Servidores",
+    "hostname": "Nome do Host",
+    "pid": "PID",
+    "uptime": "Tempo de atividade",
+    "clients-count": "# de clientes",
+    "last-ping": "Último ping",
+    "healthy": "Bom",
+    "unhealthy": "Ruim"
+  },
+  "config": {
+    "language": "Idioma",
+    "readonly": "Somente leitura?",
+    "dark-theme": "Tema escuro?"
+  }
+}
