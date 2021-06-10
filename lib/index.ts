@@ -341,13 +341,17 @@ const serialize = (
 ): SerializedSocket => {
   const clientId = socket.data?._admin?.clientId;
   const transport = socket.data?._admin?.transport;
+  const address =
+    socket.handshake.headers["cf-connecting-ip"] ||
+    socket.handshake.headers["x-forwarded-for"] ||
+    socket.handshake.address;
   return {
     id: socket.id,
     clientId,
     transport,
     nsp,
     handshake: {
-      address: socket.handshake.address,
+      address,
       headers: socket.handshake.headers,
       query: socket.handshake.query,
       issued: socket.handshake.issued,
