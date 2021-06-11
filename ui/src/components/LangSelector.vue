@@ -18,6 +18,10 @@ export default {
     return {
       languages: [
         {
+          text: "বাংলা",
+          value: "bn",
+        },
+        {
           text: "English",
           value: "en",
         },
