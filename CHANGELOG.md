@@ -1,3 +1,14 @@
+# [0.2.0](https://github.com/socketio/socket.io-admin-ui/compare/0.1.2...0.2.0) (2021-06-11)
+
+
+### Features
+
+* **ui:** add Bengali (বাংলা) translation ([#18](https://github.com/socketio/socket.io-admin-ui/issues/18)) ([b9c09f4](https://github.com/socketio/socket.io-admin-ui/commit/b9c09f4c7d690c13c662e734ad6b142af3d9dfef))
+* **ui:** add pt-BR locale ([#13](https://github.com/socketio/socket.io-admin-ui/issues/13)) ([e8d05bd](https://github.com/socketio/socket.io-admin-ui/commit/e8d05bd11833c21d65055a92c0ab21973c515052))
+* display the real IP address of the user ([#16](https://github.com/socketio/socket.io-admin-ui/issues/16)) ([2e05f70](https://github.com/socketio/socket.io-admin-ui/commit/2e05f706c62792f9d497910bdabb44d12292c806))
+
+
+
 ## [0.1.2](https://github.com/socketio/socket.io-admin-ui/compare/0.1.1...0.1.2) (2021-06-02)
 
 
