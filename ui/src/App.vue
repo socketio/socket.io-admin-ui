@@ -1,8 +1,8 @@
 <template>
   <v-app>
-    <AppBar @update="showConnectionModal = true" />
+    <AppBar @toggleNavigationDrawer="$store.commit('navdrawer/toggle')" @update="showConnectionModal = true" />
 
-    <NavigationDrawer />
+    <NavigationDrawer @update="showConnectionModal = true" />
 
     <v-main :class="backgroundColor">
       <v-container fluid>

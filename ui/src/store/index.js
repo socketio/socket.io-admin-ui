@@ -4,6 +4,7 @@ import config from "./modules/config";
 import connection from "./modules/connection";
 import main from "./modules/main";
 import servers from "./modules/servers";
+import navdrawer from "./modules/navdrawer";
 
 Vue.use(Vuex);
 
@@ -13,5 +14,6 @@ export default new Vuex.Store({
     connection,
     main,
     servers,
+    navdrawer
   },
 });

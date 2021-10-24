@@ -1,7 +1,8 @@
 <template>
   <v-app-bar app clipped-left>
+    <v-app-bar-nav-icon class="d-lg-none" @click.stop="toggleNavigationDrawer" ></v-app-bar-nav-icon>
     <v-img :src="logoSrc" alt="logo" max-height="40" max-width="40" />
-    <v-toolbar-title class="ml-3">Socket.IO Admin UI</v-toolbar-title>
+    <v-toolbar-title class="ml-3 hidden-sm-and-down">Socket.IO Admin UI</v-toolbar-title>
     <v-btn small class="pa-0 ml-2 elevation-0" :href="linkToReleaseNotes">{{
       version
     }}</v-btn>
@@ -10,7 +11,7 @@
 
     <div class="d-flex">
       <div>
-        <div>
+        <div class="hidden-sm-and-down" >
           {{ $t("connection.serverUrl") }}{{ $t("separator")
           }}<code v-if="serverUrl">{{ serverUrl }}</code>
         </div>
@@ -20,7 +21,7 @@
         </div>
       </div>
 
-      <v-btn @click="onUpdate" class="ml-3 align-self-center">{{
+      <v-btn @click="onUpdate" class="ml-3 align-self-center hidden-sm-and-down">{{
         $t("update")
       }}</v-btn>
     </div>
@@ -64,6 +65,9 @@ export default {
     onUpdate() {
       this.$emit("update");
     },
+    toggleNavigationDrawer(){
+      this.$emit('toggleNavigationDrawer');
+    }
   },
 };
 </script>

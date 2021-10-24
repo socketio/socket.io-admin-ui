@@ -1,6 +1,17 @@
 <template>
-  <v-navigation-drawer app clipped permanent class="elevation-3">
+  <v-navigation-drawer v-model="$store.state.navdrawer.drawer" app clipped class="elevation-3">
     <v-list dense nav>
+
+      <v-list-item style="margin: 1rem 0rem;" class="d-lg-none" >
+        <v-list-item-content>
+          <div>{{ $t("connection.serverUrl") }}{{ $t("separator") }}</div>
+          <v-list-item-title v-if="serverUrl" class="text-wrap" ><code>{{ serverUrl }}</code></v-list-item-title>
+          <div class="mt-1" >
+            <v-btn x-small @click="onUpdate" >{{ $t("update") }}</v-btn>
+          </div>
+        </v-list-item-content>
+      </v-list-item>
+
       <v-list-item
         v-for="item in items"
         :key="item.title"
@@ -15,6 +26,7 @@
           <v-list-item-title>{{ item.title }}</v-list-item-title>
         </v-list-item-content>
       </v-list-item>
+      
     </v-list>
 
     <template v-slot:append>
@@ -30,6 +42,7 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 import LangSelector from "./LangSelector";
 import ThemeSelector from "./ThemeSelector";
 import ReadonlyToggle from "./ReadonlyToggle";
@@ -69,6 +82,16 @@ export default {
         },
       ];
     },
+    ...mapState({
+      serverUrl: (state) => state.connection.serverUrl,
+    })
   },
+
+  methods: {
+    onUpdate() {
+      this.$emit("update");
+    }
+  }
+
 };
 </script>
