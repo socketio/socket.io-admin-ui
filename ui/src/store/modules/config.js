@@ -7,6 +7,7 @@ export default {
     readonly: false,
     lang: "en",
     supportedFeatures: [],
+    showNavigationDrawer: false,
   },
   mutations: {
     init(state) {
@@ -36,6 +37,9 @@ export default {
     },
     updateConfig(state, config) {
       state.supportedFeatures = config.supportedFeatures;
+    },
+    toggleNavigationDrawer(state) {
+      state.showNavigationDrawer = !state.showNavigationDrawer;
     },
   },
 };

@@ -1,5 +1,10 @@
 <template>
-  <v-navigation-drawer app clipped permanent class="elevation-3">
+  <v-navigation-drawer
+    v-model="$store.state.config.showNavigationDrawer"
+    app
+    clipped
+    class="elevation-3"
+  >
     <v-list dense nav>
       <v-list-item
         v-for="item in items"
