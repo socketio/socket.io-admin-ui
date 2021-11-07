@@ -24,6 +24,7 @@ interface ServerStats {
 export interface SerializedSocket {
   id: string;
   clientId: string;
+  data: any;
   transport: string;
   nsp: string;
   handshake: any;

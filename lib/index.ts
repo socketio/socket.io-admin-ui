@@ -348,6 +348,7 @@ const serialize = (
   return {
     id: socket.id,
     clientId,
+    data: socket.data,
     transport,
     nsp,
     handshake: {
