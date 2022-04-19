@@ -26,6 +26,7 @@ export interface SerializedSocket {
   clientId: string;
   transport: string;
   nsp: string;
+  data: any;
   handshake: any;
   rooms: string[];
 }

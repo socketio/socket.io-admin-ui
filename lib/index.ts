@@ -299,14 +299,34 @@ const registerListeners = (
   adminNamespace: Namespace<{}, ServerEvents>,
   nsp: Namespace
 ) => {
-  nsp.on("connection", (socket) => {
+  nsp.prependListener("connection", (socket) => {
     // @ts-ignore
     const clientId = socket.client.id;
-    socket.data = socket.data || {};
-    socket.data._admin = {
-      clientId: clientId.substring(0, 12), // this information is quite sensitive
-      transport: socket.conn.transport.name,
+
+    const createProxy = (obj: any) => {
+      if (typeof obj !== "object") {
+        return obj;
+      }
+      return new Proxy(obj, {
+        set(target: any, p: string | symbol, value: any): boolean {
+          target[p] = createProxy(value);
+
+          adminNamespace.emit("socket_updated", {
+            id: socket.id,
+            nsp: nsp.name,
+            data: serializeData(socket.data),
+          });
+          return true;
+        },
+      });
     };
+
+    socket.data = createProxy({
+      _admin: {
+        clientId: clientId.substring(0, 12), // this information is quite sensitive
+        transport: socket.conn.transport.name,
+      },
+    });
 
     adminNamespace.emit("socket_connected", serialize(socket, nsp.name));
 
@@ -319,7 +339,7 @@ const registerListeners = (
       });
     });
 
-    socket.on("disconnect", (reason) => {
+    socket.on("disconnect", (reason: string) => {
       adminNamespace.emit("socket_disconnected", nsp.name, socket.id, reason);
     });
   });
@@ -350,6 +370,7 @@ const serialize = (
     clientId,
     transport,
     nsp,
+    data: serializeData(socket.data),
     handshake: {
       address,
       headers: socket.handshake.headers,
@@ -363,6 +384,11 @@ const serialize = (
     },
     rooms: [...socket.rooms],
   };
+};
+
+const serializeData = (data: any) => {
+  const { _admin, ...obj } = data;
+  return obj;
 };
 
 export function instrument(io: Server, opts: Partial<InstrumentOptions>) {
