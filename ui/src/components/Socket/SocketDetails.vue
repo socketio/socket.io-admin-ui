@@ -92,6 +92,12 @@
           </tr>
 
           <tr>
+            <td class="key-column">{{ $t("data") }}</td>
+            <td>{{ JSON.stringify(socket.data) }}</td>
+            <td></td>
+          </tr>
+
+          <tr>
             <td class="key-column">{{ $t("status") }}</td>
             <td>
               <ConnectionStatus :connected="socket.connected" />

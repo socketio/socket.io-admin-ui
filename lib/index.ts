@@ -350,6 +350,7 @@ const serialize = (
     clientId,
     transport,
     nsp,
+    data: socket.data,
     handshake: {
       address,
       headers: socket.handshake.headers,
