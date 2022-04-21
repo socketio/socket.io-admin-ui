@@ -346,11 +346,11 @@ const serialize = (
     socket.handshake.headers["x-forwarded-for"] ||
     socket.handshake.address;
   const dataHandler: ProxyHandler<{}> = {
-    get(target, props, receiver) {
-      const data = Object.fromEntries(
-        Object.entries(socket.data).filter(([k, v]) => k !== '_admin')
-      );
-      return data;
+    get(target, prop, receiver) {
+      if (prop === "_admin") {
+        return;
+      }
+      return Reflect.get(...arguments);
     }
   }
   
@@ -359,7 +359,7 @@ const serialize = (
     clientId,
     transport,
     nsp,
-    data: new Proxy({}, dataHandler),
+    data: new Proxy(socket.data, dataHandler),
     handshake: {
       address,
       headers: socket.handshake.headers,
