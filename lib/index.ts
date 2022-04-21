@@ -350,7 +350,7 @@ const serialize = (
       if (prop === "_admin") {
         return;
       }
-      return Reflect.get(...arguments);
+      return Reflect.get(target, prop, receiver);
     }
   }
   
