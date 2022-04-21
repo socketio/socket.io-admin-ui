@@ -94,11 +94,7 @@
           <tr>
             <td class="key-column">{{ $t("data") }}</td>
             <td>
-              <pre>
-                <code>
-                  {{ JSON.stringify(socket.data, null, 2) }}
-                </code>
-              </pre>
+              <pre><code>{{ JSON.stringify(socket.data, null, 2) }}</code></pre>
             </td>
             <td></td>
           </tr>
