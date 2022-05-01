@@ -24,7 +24,10 @@
     "invalid-credentials": "Invalid credentials",
     "error": "Error",
     "websocket-only": "WebSocket only?",
-    "path": "Path"
+    "path": "Path",
+    "parser": "Parser",
+    "default-parser": "Built-in parser",
+    "msgpack-parser": "MessagePack parser"
   },
   "dashboard": {
     "title": "Dashboard"

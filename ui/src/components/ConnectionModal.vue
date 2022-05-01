@@ -37,6 +37,12 @@
             :label="$t('connection.path')"
           ></v-text-field>
 
+          <v-select
+            v-model="parser"
+            :label="$t('connection.parser')"
+            :items="parserOptions"
+          />
+
           <v-btn
             :loading="isConnecting"
             :disabled="isConnecting || !isValid"
@@ -63,6 +69,7 @@ export default {
     initialServerUrl: String,
     initialWsOnly: Boolean,
     initialPath: String,
+    initialParser: String,
     error: String,
   },
 
@@ -73,6 +80,17 @@ export default {
       path: this.initialPath,
       username: "",
       password: "",
+      parser: this.initialParser,
+      parserOptions: [
+        {
+          value: "default",
+          text: this.$t("connection.default-parser"),
+        },
+        {
+          value: "msgpack",
+          text: this.$t("connection.msgpack-parser"),
+        },
+      ],
     };
   },
 
@@ -95,6 +113,7 @@ export default {
         path: this.path,
         username: this.username,
         password: this.password,
+        parser: this.parser,
       });
     },
   },

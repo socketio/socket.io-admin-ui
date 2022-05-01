@@ -1,0 +1,17 @@
+{
+  "name": "single-server-msgpack-parser",
+  "version": "0.0.1",
+  "description": "Sample server to be used with the Socket.IO Admin UI",
+  "private": true,
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "Damien Arrachequesne <damien.arrachequesne@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "socket.io": "^4.4.1",
+    "socket.io-msgpack-parser": "^3.0.1"
+  }
+}

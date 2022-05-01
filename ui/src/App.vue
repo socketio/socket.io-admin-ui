@@ -17,6 +17,7 @@
       :initial-server-url="serverUrl"
       :initial-ws-only="wsOnly"
       :initial-path="path"
+      :initial-parser="parser"
       :is-connecting="isConnecting"
       :error="connectionError"
       @submit="onSubmit"
@@ -28,6 +29,7 @@
 import AppBar from "./components/AppBar";
 import NavigationDrawer from "./components/NavigationDrawer";
 import { io } from "socket.io-client";
+import msgpackParser from "socket.io-msgpack-parser";
 import ConnectionModal from "./components/ConnectionModal";
 import SocketHolder from "./SocketHolder";
 import { mapState } from "vuex";
@@ -63,6 +65,7 @@ export default {
       serverUrl: (state) => state.connection.serverUrl,
       wsOnly: (state) => state.connection.wsOnly,
       path: (state) => state.connection.path,
+      parser: (state) => state.connection.parser,
       backgroundColor: (state) =>
         state.config.darkTheme ? "" : "grey lighten-5",
     }),
@@ -84,7 +87,7 @@ export default {
   },
 
   methods: {
-    tryConnect(serverUrl, auth, wsOnly, path) {
+    tryConnect(serverUrl, auth, wsOnly, path, parser) {
       this.isConnecting = true;
       if (SocketHolder.socket) {
         SocketHolder.socket.disconnect();
@@ -98,6 +101,7 @@ export default {
         withCredentials: true, // needed for cookie-based sticky-sessions
         transports: wsOnly ? ["websocket"] : ["polling", "websocket"],
         path,
+        parser: parser === "msgpack" ? msgpackParser : null,
         auth,
       });
       socket.once("connect", () => {
@@ -110,6 +114,7 @@ export default {
           serverUrl,
           wsOnly,
           path,
+          parser,
         });
         SocketHolder.socket = socket;
         this.registerEventListeners(socket);
@@ -121,10 +126,16 @@ export default {
         if (this.isConnecting || err.message === "invalid credentials") {
           this.showConnectionModal = true;
           this.connectionError = err.message;
-          this.isConnecting = false;
         }
+        this.isConnecting = false;
       });
-      socket.on("disconnect", () => {
+      socket.on("disconnect", (reason) => {
+        // this should not be needed, but connection errors with a mismatching parser may trigger in a "disconnect"
+        // event instead of a "connect_error" event (needs to be fixed in the client code)
+        if (this.isConnecting) {
+          this.isConnecting = false;
+          this.connectionError = reason;
+        }
         this.$store.commit("connection/disconnect");
       });
     },
@@ -171,7 +182,8 @@ export default {
           password: form.password,
         },
         form.wsOnly,
-        form.path
+        form.path,
+        form.parser
       );
     },
   },
@@ -187,7 +199,8 @@ export default {
           sessionId,
         },
         this.wsOnly,
-        this.path
+        this.path,
+        this.parser
       );
     } else {
       this.showConnectionModal = true;

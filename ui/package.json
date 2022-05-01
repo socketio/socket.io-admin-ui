@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "core-js": "^3.6.5",
+    "socket.io-msgpack-parser": "^3.0.1",
     "vue": "^2.6.11",
     "vue-i18n": "^8.22.3",
     "vue-router": "^3.2.0",
@@ -33,7 +34,7 @@
     "prettier": "^2.2.1",
     "sass": "^1.32.0",
     "sass-loader": "^10.0.0",
-    "socket.io-client": "^4.0.1",
+    "socket.io-client": "^4.5.0",
     "vue-chartjs": "^3.5.1",
     "vue-cli-plugin-i18n": "~2.0.3",
     "vue-cli-plugin-vuetify": "~2.3.1",
