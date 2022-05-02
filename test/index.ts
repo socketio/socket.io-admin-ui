@@ -300,6 +300,46 @@ describe("Socket.IO Admin (server instrumentation)", () => {
         adminSocket.disconnect();
       });
 
+      it("emits event when socket.data is updated", async () => {
+        instrument(io, {
+          auth: false,
+        });
+
+        const adminSocket = ioc(`http://localhost:${port}/admin`);
+
+        await waitFor(adminSocket, "connect");
+
+        const clientSocket = ioc(`http://localhost:${port}`, {
+          forceNew: true,
+          transports: ["polling"],
+        });
+
+        io.use((socket, next) => {
+          socket.data = socket.data || {};
+          socket.data.count = 1;
+          socket.data.array = [1];
+          next();
+        });
+
+        const serverSocket = await waitFor(io, "connection");
+
+        const socket = await waitFor(adminSocket, "socket_connected");
+        expect(socket.data).to.eql({ count: 1, array: [1] });
+
+        serverSocket.data.count++;
+
+        const updatedSocket1 = await waitFor(adminSocket, "socket_updated");
+        expect(updatedSocket1.data).to.eql({ count: 2, array: [1] });
+
+        serverSocket.data.array.push(2);
+
+        const updatedSocket2 = await waitFor(adminSocket, "socket_updated");
+        expect(updatedSocket2.data).to.eql({ count: 2, array: [1, 2] });
+
+        adminSocket.disconnect();
+        clientSocket.disconnect();
+      });
+
       it("performs administrative tasks", async () => {
         instrument(io, {
           auth: false,

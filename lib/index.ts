@@ -321,12 +321,18 @@ const registerListeners = (
       });
     };
 
+    const data = socket.data || {}; // could be set in a middleware
+
     socket.data = createProxy({
       _admin: {
         clientId: clientId.substring(0, 12), // this information is quite sensitive
         transport: socket.conn.transport.name,
       },
     });
+
+    for (const key in data) {
+      socket.data[key] = createProxy(data[key]);
+    }
 
     adminNamespace.emit("socket_connected", serialize(socket, nsp.name));
 
