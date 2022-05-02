@@ -326,7 +326,7 @@ const registerListeners = (
         clientId: clientId.substring(0, 12), // this information is quite sensitive
         transport: socket.conn.transport.name,
       },
-      ...socket.data
+      ...socket.data,
     });
 
     adminNamespace.emit("socket_connected", serialize(socket, nsp.name));
