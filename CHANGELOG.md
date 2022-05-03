@@ -1,3 +1,15 @@
+# [0.3.0](https://github.com/socketio/socket.io-admin-ui/compare/0.2.0...0.3.0) (2022-05-03)
+
+
+### Features
+
+* add navigation drawer for mobile devices ([#31](https://github.com/socketio/socket.io-admin-ui/issues/31)) ([62e1467](https://github.com/socketio/socket.io-admin-ui/commit/62e146709f1b4ceee86b6c9d414d0538b2991833))
+* add socket data in the UI ([#37](https://github.com/socketio/socket.io-admin-ui/issues/37)) ([3773fe4](https://github.com/socketio/socket.io-admin-ui/commit/3773fe4b1cbf2206708e1f21ce65f430a522527f))
+* add support for the msgpack parser ([4359536](https://github.com/socketio/socket.io-admin-ui/commit/4359536a4b9c09395c52ac7e983123f02043ac5c))
+* **ui:** improve Bengali (বাংলা) translation ([#27](https://github.com/socketio/socket.io-admin-ui/issues/27)) ([925c617](https://github.com/socketio/socket.io-admin-ui/commit/925c617af10996b7e31709d74afb340701104fc0))
+
+
+
 # [0.2.0](https://github.com/socketio/socket.io-admin-ui/compare/0.1.2...0.2.0) (2021-06-11)
 
 
