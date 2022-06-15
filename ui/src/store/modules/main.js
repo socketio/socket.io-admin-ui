@@ -10,6 +10,7 @@ const getOrCreateNamespace = (namespaces, name) => {
     name,
     sockets: [],
     rooms: [],
+    events: [],
   };
   namespaces.push(namespace);
   return namespace;
@@ -64,6 +65,17 @@ const addSocket = (state, socket) => {
   }
 };
 
+const MAX_ARRAY_LENGTH = 1000;
+let EVENT_COUNTER = 0;
+
+const pushEvents = (array, event) => {
+  event.eventId = ++EVENT_COUNTER; // unique id
+  array.push(event);
+  if (array.length > MAX_ARRAY_LENGTH) {
+    array.shift();
+  }
+};
+
 export default {
   namespaced: true,
   state: {
@@ -97,6 +109,9 @@ export default {
     rooms: (state) => {
       return state.selectedNamespace ? state.selectedNamespace.rooms : [];
     },
+    events: (state) => {
+      return state.selectedNamespace ? state.selectedNamespace.events : [];
+    },
   },
   mutations: {
     selectNamespace(state, namespace) {
@@ -114,8 +129,14 @@ export default {
           find(state.namespaces, { name: "/" }) || state.namespaces[0];
       }
     },
-    onSocketConnected(state, socket) {
+    onSocketConnected(state, { timestamp, socket }) {
       addSocket(state, socket);
+      const namespace = getOrCreateNamespace(state.namespaces, socket.nsp);
+      pushEvents(namespace.events, {
+        type: "connection",
+        timestamp,
+        id: socket.id,
+      });
     },
     onSocketUpdated(state, socket) {
       const namespace = getOrCreateNamespace(state.namespaces, socket.nsp);
@@ -124,7 +145,7 @@ export default {
         merge(existingSocket, socket);
       }
     },
-    onSocketDisconnected(state, { nsp, id }) {
+    onSocketDisconnected(state, { timestamp, nsp, id, reason }) {
       const namespace = getOrCreateNamespace(state.namespaces, nsp);
       const [socket] = remove(namespace.sockets, { id });
       if (socket) {
@@ -137,8 +158,14 @@ export default {
           remove(state.clients, { id: socket.clientId });
         }
       }
+      pushEvents(namespace.events, {
+        type: "disconnection",
+        timestamp,
+        id,
+        args: reason,
+      });
     },
-    onRoomJoined(state, { nsp, room, id }) {
+    onRoomJoined(state, { nsp, room, id, timestamp }) {
       const namespace = getOrCreateNamespace(state.namespaces, nsp);
       const socket = find(namespace.sockets, { id });
       if (socket) {
@@ -146,8 +173,14 @@ export default {
         const _room = getOrCreateRoom(namespace, room);
         _room.sockets.push(socket);
       }
+      pushEvents(namespace.events, {
+        type: "room_joined",
+        timestamp,
+        id,
+        args: room,
+      });
     },
-    onRoomLeft(state, { nsp, room, id }) {
+    onRoomLeft(state, { timestamp, nsp, room, id }) {
       const namespace = getOrCreateNamespace(state.namespaces, nsp);
       const socket = find(namespace.sockets, { id });
       if (socket) {
@@ -159,6 +192,12 @@ export default {
         _room.active = false;
         remove(namespace.rooms, { name: room });
       }
+      pushEvents(namespace.events, {
+        type: "room_left",
+        timestamp,
+        id,
+        args: room,
+      });
     },
   },
 };

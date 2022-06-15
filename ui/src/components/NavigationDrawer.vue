@@ -68,6 +68,11 @@ export default {
           to: { name: "clients" },
         },
         {
+          title: this.$t("events.title"),
+          icon: "mdi-calendar-text-outline",
+          to: { name: "events" },
+        },
+        {
           title: this.$t("servers.title"),
           icon: "mdi-server",
           to: { name: "servers" },

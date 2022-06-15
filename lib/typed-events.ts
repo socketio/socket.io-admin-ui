@@ -36,11 +36,16 @@ export interface ServerEvents {
   config: (config: Config) => void;
   server_stats: (stats: ServerStats) => void;
   all_sockets: (sockets: SerializedSocket[]) => void;
-  socket_connected: (socket: SerializedSocket) => void;
+  socket_connected: (socket: SerializedSocket, timestamp: Date) => void;
   socket_updated: (socket: Partial<SerializedSocket>) => void;
-  socket_disconnected: (nsp: string, id: string, reason: string) => void;
-  room_joined: (nsp: string, room: string, id: string) => void;
-  room_left: (nsp: string, room: string, id: string) => void;
+  socket_disconnected: (
+    nsp: string,
+    id: string,
+    reason: string,
+    timestamp: Date
+  ) => void;
+  room_joined: (nsp: string, room: string, id: string, timestamp: Date) => void;
+  room_left: (nsp: string, room: string, id: string, timestamp: Date) => void;
 }
 
 export interface ClientEvents {

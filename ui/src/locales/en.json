@@ -15,6 +15,8 @@
   "connected": "connected",
   "disconnected": "disconnected",
   "data": "Data",
+  "timestamp": "Timestamp",
+  "args": "Arguments",
   "connection": {
     "title": "Connection",
     "serverUrl": "Server URL",
@@ -84,5 +86,14 @@
     "language": "Language",
     "readonly": "Read-only?",
     "dark-theme": "Dark theme?"
+  },
+  "events": {
+    "title": "Events",
+    "type": {
+      "connection": "Connection",
+      "disconnection": "Disconnection",
+      "room_joined": "Room joined",
+      "room_left": "Room left"
+    }
   }
 }

@@ -14,6 +14,9 @@
   "status": "Statut",
   "connected": "connecté",
   "disconnected": "déconnecté",
+  "data": "Données",
+  "timestamp": "Horodatage",
+  "args": "Arguments",
   "connection": {
     "title": "Connexion",
     "serverUrl": "URL du serveur",
@@ -80,5 +83,14 @@
     "language": "Langue",
     "readonly": "Lecture seule ?",
     "dark-theme": "Mode sombre ?"
+  },
+  "events": {
+    "title": "Évènements",
+    "type": {
+      "connection": "Connexion",
+      "disconnection": "Déconnexion",
+      "room_joined": "Salle rejointe",
+      "room_left": "Salle quittée"
+    }
   }
 }

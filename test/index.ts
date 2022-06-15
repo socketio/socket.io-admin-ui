@@ -264,7 +264,7 @@ describe("Socket.IO Admin (server instrumentation)", () => {
 
         // connect
         const serverSocket = await waitFor(io, "connection");
-        const socket = await waitFor(adminSocket, "socket_connected");
+        const [socket] = await waitFor(adminSocket, "socket_connected");
 
         expect(socket.id).to.eql(serverSocket.id);
         expect(socket.nsp).to.eql("/");
@@ -329,7 +329,7 @@ describe("Socket.IO Admin (server instrumentation)", () => {
 
         const serverSocket = await waitFor(io, "connection");
 
-        const socket = await waitFor(adminSocket, "socket_connected");
+        const [socket] = await waitFor(adminSocket, "socket_connected");
         expect(socket.data).to.eql({ count: 1, array: [1] });
 
         serverSocket.data.count++;
@@ -401,7 +401,7 @@ describe("Socket.IO Admin (server instrumentation)", () => {
           forceNew: true,
         });
 
-        const socket = await waitFor(adminSocket, "socket_connected");
+        const [socket] = await waitFor(adminSocket, "socket_connected");
 
         expect(socket.nsp).to.eql("/dynamic-101");
         clientSocket.disconnect();

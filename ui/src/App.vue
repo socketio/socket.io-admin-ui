@@ -40,6 +40,11 @@ import {
   VSlideYReverseTransition,
 } from "vuetify/lib";
 
+// created on the client side, for backward compatibility
+function defaultTimestamp() {
+  return new Date().toISOString();
+}
+
 export default {
   name: "App",
 
@@ -153,25 +158,41 @@ export default {
       socket.on("all_sockets", (sockets) => {
         this.$store.commit("main/onAllSockets", sockets);
       });
-      socket.on("socket_connected", (socket) => {
-        this.$store.commit("main/onSocketConnected", socket);
-      });
+      socket.on(
+        "socket_connected",
+        (socket, timestamp = defaultTimestamp()) => {
+          this.$store.commit("main/onSocketConnected", {
+            timestamp,
+            socket,
+          });
+        }
+      );
       socket.on("socket_updated", (socket) => {
         this.$store.commit("main/onSocketUpdated", socket);
       });
-      socket.on("socket_disconnected", (nsp, id, reason) => {
-        this.$store.commit("main/onSocketDisconnected", {
-          nsp,
-          id,
-          reason,
-        });
-      });
-      socket.on("room_joined", (nsp, room, id) => {
-        this.$store.commit("main/onRoomJoined", { nsp, room, id });
-      });
-      socket.on("room_left", (nsp, room, id) => {
-        this.$store.commit("main/onRoomLeft", { nsp, room, id });
-      });
+      socket.on(
+        "socket_disconnected",
+        (nsp, id, reason, timestamp = defaultTimestamp()) => {
+          this.$store.commit("main/onSocketDisconnected", {
+            timestamp,
+            nsp,
+            id,
+            reason,
+          });
+        }
+      );
+      socket.on(
+        "room_joined",
+        (nsp, room, id, timestamp = defaultTimestamp()) => {
+          this.$store.commit("main/onRoomJoined", { timestamp, nsp, room, id });
+        }
+      );
+      socket.on(
+        "room_left",
+        (nsp, room, id, timestamp = defaultTimestamp()) => {
+          this.$store.commit("main/onRoomLeft", { timestamp, nsp, room, id });
+        }
+      );
     },
 
     onSubmit(form) {

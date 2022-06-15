@@ -334,7 +334,11 @@ const registerListeners = (
       socket.data[key] = createProxy(data[key]);
     }
 
-    adminNamespace.emit("socket_connected", serialize(socket, nsp.name));
+    adminNamespace.emit(
+      "socket_connected",
+      serialize(socket, nsp.name),
+      new Date()
+    );
 
     socket.conn.on("upgrade", (transport: any) => {
       socket.data._admin.transport = transport.name;
@@ -346,17 +350,23 @@ const registerListeners = (
     });
 
     socket.on("disconnect", (reason: string) => {
-      adminNamespace.emit("socket_disconnected", nsp.name, socket.id, reason);
+      adminNamespace.emit(
+        "socket_disconnected",
+        nsp.name,
+        socket.id,
+        reason,
+        new Date()
+      );
     });
   });
 
   nsp.adapter.on("join-room", (room: string, id: string) => {
-    adminNamespace.emit("room_joined", nsp.name, room, id);
+    adminNamespace.emit("room_joined", nsp.name, room, id, new Date());
   });
 
   nsp.adapter.on("leave-room", (room: string, id: string) => {
     process.nextTick(() => {
-      adminNamespace.emit("room_left", nsp.name, room, id);
+      adminNamespace.emit("room_left", nsp.name, room, id, new Date());
     });
   });
 };

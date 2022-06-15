@@ -8,6 +8,7 @@ import Clients from "../views/Clients";
 import Client from "../views/Client";
 import Servers from "../views/Servers";
 import Room from "../views/Room";
+import Events from "@/views/Events";
 
 Vue.use(VueRouter);
 
@@ -73,12 +74,21 @@ const routes = [
     },
   },
   {
+    path: "/events/",
+    name: "events",
+    component: Events,
+    meta: {
+      topLevel: true,
+      index: 4,
+    },
+  },
+  {
     path: "/servers/",
     name: "servers",
     component: Servers,
     meta: {
       topLevel: true,
-      index: 4,
+      index: 5,
     },
   },
 ];
