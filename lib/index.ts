@@ -362,7 +362,7 @@ const registerListeners = (
 };
 
 const serialize = (
-  socket: Socket | RemoteSocket<any>,
+  socket: Socket | RemoteSocket<any, any>,
   nsp: string
 ): SerializedSocket => {
   const clientId = socket.data?._admin?.clientId;

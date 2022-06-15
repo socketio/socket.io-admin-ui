@@ -15,6 +15,9 @@ const waitFor = (emitter: any, event: string): Promise<any> => {
   });
 };
 
+const sleep = (duration: number) =>
+  new Promise((resolve) => setTimeout(resolve, duration));
+
 describe("Socket.IO Admin (server instrumentation)", () => {
   ([
     ["v4", Server],
@@ -241,6 +244,9 @@ describe("Socket.IO Admin (server instrumentation)", () => {
 
         clientSocket.disconnect();
         adminSocket.disconnect();
+
+        // FIXME without this, the process does not exit properly (?)
+        await sleep(100);
       });
 
       it("emits administrative events", async () => {
