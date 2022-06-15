@@ -190,6 +190,9 @@ export default {
 
   created() {
     this.$vuetify.theme.dark = this.$store.state.config.darkTheme;
+    if (this.$vuetify.breakpoint.lgAndUp) {
+      this.$store.commit("config/toggleNavigationDrawer");
+    }
 
     if (this.serverUrl) {
       const sessionId = this.$store.state.connection.sessionId;
