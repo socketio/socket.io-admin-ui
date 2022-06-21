@@ -2,6 +2,8 @@ import { Namespace, RemoteSocket, Server, Socket } from "socket.io";
 import {
   ClientEvents,
   Feature,
+  NamespaceDetails,
+  NamespaceEvent,
   SerializedSocket,
   ServerEvents,
 } from "./typed-events";
@@ -46,6 +48,10 @@ interface InstrumentOptions {
    * The store
    */
   store: Store;
+  /**
+   * Whether to send all events or only aggregated events to the UI, for performance purposes.
+   */
+  mode: "development" | "production";
 }
 
 const initAuthenticationMiddleware = (
@@ -120,16 +126,26 @@ const initStatsEmitter = (
     pid: process.pid,
   };
 
+  const io = adminNamespace.server;
+
   const emitStats = () => {
     debug("emit stats");
-    // @ts-ignore private reference
-    const clientsCount = adminNamespace.server.engine.clientsCount;
+    const namespaces: NamespaceDetails[] = [];
+    io._nsps.forEach((namespace) => {
+      namespaces.push({
+        name: namespace.name,
+        socketsCount: namespace.sockets.size,
+      });
+    });
 
     adminNamespace.emit(
       "server_stats",
       Object.assign({}, baseStats, {
         uptime: process.uptime(),
-        clientsCount,
+        clientsCount: io.engine.clientsCount,
+        pollingClientsCount: io._pollingClientsCount,
+        aggregatedEvents: io._eventBuffer.getValuesAndClear(),
+        namespaces,
       })
     );
   };
@@ -295,7 +311,7 @@ const registerFeatureHandlers = (
   }
 };
 
-const registerListeners = (
+const registerVerboseListeners = (
   adminNamespace: Namespace<{}, ServerEvents>,
   nsp: Namespace
 ) => {
@@ -407,6 +423,81 @@ const serializeData = (data: any) => {
   return obj;
 };
 
+declare module "socket.io" {
+  interface Server {
+    _eventBuffer: EventBuffer;
+    _pollingClientsCount: number;
+  }
+}
+
+class EventBuffer {
+  private buffer: Map<string, NamespaceEvent> = new Map();
+
+  public push(type: string, subType?: string, count = 1) {
+    const timestamp = new Date();
+    timestamp.setMilliseconds(0);
+    const key = `${timestamp.getTime()};${type};${subType}`;
+    if (this.buffer.has(key)) {
+      this.buffer.get(key)!.count += count;
+    } else {
+      this.buffer.set(key, {
+        timestamp: timestamp.getTime(),
+        type,
+        subType,
+        count,
+      });
+    }
+  }
+
+  public getValuesAndClear() {
+    const values = [...this.buffer.values()];
+    this.buffer.clear();
+    return values;
+  }
+}
+
+const registerEngineListeners = (io: Server) => {
+  io._eventBuffer = new EventBuffer();
+  io._pollingClientsCount = 0;
+
+  io.engine.on("connection", (rawSocket: any) => {
+    io._eventBuffer.push("rawConnection");
+
+    if (rawSocket.transport.name === "polling") {
+      io._pollingClientsCount++;
+
+      const decr = () => {
+        io._pollingClientsCount--;
+      };
+
+      rawSocket.once("upgrade", () => {
+        rawSocket.removeListener("close", decr);
+        decr();
+      });
+
+      rawSocket.once("close", decr);
+    }
+
+    rawSocket.on("packetCreate", ({ data }: { data: string | Buffer }) => {
+      if (data) {
+        io._eventBuffer.push("packetsOut", undefined);
+        io._eventBuffer.push("bytesOut", undefined, Buffer.byteLength(data));
+      }
+    });
+
+    rawSocket.on("packet", ({ data }: { data: string | Buffer }) => {
+      if (data) {
+        io._eventBuffer.push("packetsIn", undefined);
+        io._eventBuffer.push("bytesIn", undefined, Buffer.byteLength(data));
+      }
+    });
+
+    rawSocket.on("close", (reason: string) => {
+      io._eventBuffer.push("rawDisconnection", reason);
+    });
+  });
+};
+
 export function instrument(io: Server, opts: Partial<InstrumentOptions>) {
   const options: InstrumentOptions = Object.assign(
     {
@@ -415,6 +506,7 @@ export function instrument(io: Server, opts: Partial<InstrumentOptions>) {
       readonly: false,
       serverId: undefined,
       store: new InMemoryStore(),
+      mode: process.env.NODE_ENV || "development",
     },
     opts
   );
@@ -428,9 +520,12 @@ export function instrument(io: Server, opts: Partial<InstrumentOptions>) {
   initAuthenticationMiddleware(adminNamespace, options);
 
   const supportedFeatures = options.readonly ? [] : detectSupportedFeatures(io);
+  supportedFeatures.push(Feature.AGGREGATED_EVENTS);
+  const isDevelopmentMode = options.mode === "development";
+  if (isDevelopmentMode) {
+    supportedFeatures.push(Feature.ALL_EVENTS);
+  }
   debug("supported features: %j", supportedFeatures);
-
-  initStatsEmitter(adminNamespace, options.serverId);
 
   adminNamespace.on("connection", async (socket) => {
     registerFeatureHandlers(io, socket, supportedFeatures);
@@ -439,11 +534,22 @@ export function instrument(io: Server, opts: Partial<InstrumentOptions>) {
       supportedFeatures,
     });
 
-    socket.emit("all_sockets", await fetchAllSockets(io));
+    if (isDevelopmentMode) {
+      socket.emit("all_sockets", await fetchAllSockets(io));
+    }
   });
 
-  io._nsps.forEach((nsp) => registerListeners(adminNamespace, nsp));
-  io.on("new_namespace", (nsp) => registerListeners(adminNamespace, nsp));
+  registerEngineListeners(io);
+
+  if (isDevelopmentMode) {
+    const registerNamespaceListeners = (nsp: Namespace) => {
+      registerVerboseListeners(adminNamespace, nsp);
+    };
+    io._nsps.forEach(registerNamespaceListeners);
+    io.on("new_namespace", registerNamespaceListeners);
+  }
+
+  initStatsEmitter(adminNamespace, options.serverId);
 }
 
 export { InMemoryStore, RedisStore } from "./stores";

@@ -10,7 +10,11 @@
 
     <v-card-text>
       <v-row>
-        <Doughnut :chart-data="data" class="chart" />
+        <Doughnut
+          :chart-data="data"
+          class="chart"
+          :chart-options="chartOptions"
+        />
 
         <v-simple-table class="grow align-self-center">
           <template v-slot:default>
@@ -23,14 +27,11 @@
                 <td><Transport :transport="transport" /></td>
                 <td>
                   <div>
-                    <h2>{{ transportRepartition[transport] || 0 }}</h2>
+                    <h2>{{ transportRepartition[transport] }}</h2>
                   </div>
                   <div>
                     {{
-                      percentage(
-                        transportRepartition[transport] || 0,
-                        clients.length
-                      )
+                      percentage(transportRepartition[transport], clientsCount)
                     }}
                     %
                   </div>
@@ -45,11 +46,12 @@
 </template>
 
 <script>
-import Doughnut from "./Doughnut";
-import { mapState } from "vuex";
+import { Doughnut } from "vue-chartjs/legacy";
+import { mapState, mapGetters } from "vuex";
 import colors from "vuetify/lib/util/colors";
 import Transport from "../Transport";
 import { percentage } from "../../util";
+import { sumBy } from "lodash-es";
 
 export default {
   name: "ClientsOverview",
@@ -62,6 +64,13 @@ export default {
   data() {
     return {
       transports: ["websocket", "polling"],
+      chartOptions: {
+        plugins: {
+          legend: {
+            display: false,
+          },
+        },
+      },
     };
   },
 
@@ -69,18 +78,38 @@ export default {
     ...mapState({
       clients: (state) => state.main.clients,
       darkTheme: (state) => state.config.darkTheme,
+      servers: (state) => state.servers.servers,
     }),
+    ...mapGetters("config", ["hasAggregatedValues"]),
+
+    clientsCount() {
+      if (this.hasAggregatedValues) {
+        return sumBy(this.servers, "clientsCount");
+      } else {
+        return this.clients.length;
+      }
+    },
+
     transportRepartition() {
+      if (this.hasAggregatedValues) {
+        const pollingClientsCount = sumBy(this.servers, "pollingClientsCount");
+        return {
+          polling: pollingClientsCount,
+          websocket: this.clientsCount - pollingClientsCount,
+        };
+      }
       return this.clients
         .map((client) => {
           return client.sockets[0];
         })
         .filter((socket) => !!socket)
-        .reduce((acc, socket) => {
-          acc[socket.transport] = acc[socket.transport] || 0;
-          acc[socket.transport]++;
-          return acc;
-        }, {});
+        .reduce(
+          (acc, socket) => {
+            acc[socket.transport]++;
+            return acc;
+          },
+          { websocket: 0, polling: 0 }
+        );
     },
     data() {
       return {

@@ -32,7 +32,15 @@
     "msgpack-parser": "MessagePack parser"
   },
   "dashboard": {
-    "title": "Dashboard"
+    "title": "Dashboard",
+    "connectionsHistogram": {
+      "title": "Connection and disconnection events"
+    },
+    "bytesHistogram": {
+      "title": "Bytes received and sent",
+      "bytesIn": "Bytes received",
+      "bytesOut": "Bytes sent"
+    }
   },
   "sockets": {
     "title": "Sockets",

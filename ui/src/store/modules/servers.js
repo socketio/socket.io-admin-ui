@@ -8,6 +8,24 @@ export default {
   state: {
     servers: [],
   },
+  getters: {
+    namespaces(state) {
+      const namespaces = {};
+      for (const server of state.servers) {
+        if (server.namespaces) {
+          for (const { name, socketsCount } of server.namespaces) {
+            namespaces[name] = (namespaces[name] || 0) + socketsCount;
+          }
+        }
+      }
+      return Object.keys(namespaces).map((name) => {
+        return {
+          name,
+          socketsCount: namespaces[name],
+        };
+      });
+    },
+  },
   mutations: {
     onServerStats(state, stats) {
       stats.lastPing = Date.now();

@@ -9,6 +9,17 @@ export default {
     supportedFeatures: [],
     showNavigationDrawer: false,
   },
+  getters: {
+    developmentMode(state) {
+      return (
+        state.supportedFeatures.includes("ALL_EVENTS") ||
+        !state.supportedFeatures.includes("AGGREGATED_EVENTS")
+      );
+    },
+    hasAggregatedValues: (state) => {
+      return state.supportedFeatures.includes("AGGREGATED_EVENTS");
+    },
+  },
   mutations: {
     init(state) {
       if (isLocalStorageAvailable) {

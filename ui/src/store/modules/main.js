@@ -1,5 +1,7 @@
-import { find, merge } from "lodash-es";
-import { pushUniq, remove } from "../../util";
+import { find, merge, remove as silentlyRemove } from "lodash-es";
+import { pushUniq, remove } from "@/util";
+
+const TEN_MINUTES = 10 * 60 * 1000;
 
 const getOrCreateNamespace = (namespaces, name) => {
   let namespace = find(namespaces, { name });
@@ -76,12 +78,19 @@ const pushEvents = (array, event) => {
   }
 };
 
+// group events by each 10 seconds
+// see: https://www.chartjs.org/docs/latest/general/performance.html#decimation
+function roundedTimestamp(timestamp) {
+  return timestamp - (timestamp % 10_000);
+}
+
 export default {
   namespaced: true,
   state: {
     namespaces: [],
     clients: [],
     selectedNamespace: null,
+    aggregatedEvents: [],
   },
   getters: {
     findSocketById: (state) => (nsp, id) => {
@@ -197,6 +206,32 @@ export default {
         timestamp,
         id,
         args: room,
+      });
+    },
+    onServerStats(state, serverStats) {
+      if (!serverStats.aggregatedEvents) {
+        return;
+      }
+      for (const aggregatedEvent of serverStats.aggregatedEvents) {
+        const timestamp = roundedTimestamp(aggregatedEvent.timestamp);
+        const elem = find(state.aggregatedEvents, {
+          timestamp,
+          type: aggregatedEvent.type,
+          subType: aggregatedEvent.subType,
+        });
+        if (elem) {
+          elem.count += aggregatedEvent.count;
+        } else {
+          state.aggregatedEvents.push({
+            timestamp,
+            type: aggregatedEvent.type,
+            subType: aggregatedEvent.subType,
+            count: aggregatedEvent.count,
+          });
+        }
+      }
+      silentlyRemove(state.aggregatedEvents, (elem) => {
+        return elem.timestamp < Date.now() - TEN_MINUTES;
       });
     },
   },

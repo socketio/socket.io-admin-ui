@@ -21,7 +21,7 @@
             <td class="key-column">
               <code>{{ namespace.name }}</code>
             </td>
-            <td>{{ namespace.sockets.length }}</td>
+            <td>{{ namespace.socketsCount }}</td>
           </tr>
         </tbody>
       </template>
@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState, mapGetters } from "vuex";
 import { sortBy } from "lodash-es";
 
 export default {
@@ -38,8 +38,23 @@ export default {
 
   computed: {
     ...mapState({
-      namespaces: (state) => sortBy(state.main.namespaces, "name"),
+      plainNamespaces: (state) =>
+        sortBy(state.main.namespaces, "name").map(({ name, sockets }) => {
+          return {
+            name,
+            socketsCount: sockets.length,
+          };
+        }),
     }),
+    ...mapGetters("config", ["hasAggregatedValues"]),
+    ...mapGetters("servers", {
+      liteNamespaces: "namespaces",
+    }),
+    namespaces() {
+      return this.hasAggregatedValues
+        ? this.liteNamespaces
+        : this.plainNamespaces;
+    },
   },
 };
 </script>

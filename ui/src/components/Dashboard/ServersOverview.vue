@@ -10,7 +10,11 @@
 
     <v-card-text>
       <v-row>
-        <Doughnut :chart-data="data" class="chart" />
+        <Doughnut
+          :chart-data="data"
+          :chart-options="chartOptions"
+          class="chart"
+        />
 
         <v-simple-table class="grow align-self-center">
           <template v-slot:default>
@@ -51,7 +55,7 @@
 </template>
 
 <script>
-import Doughnut from "./Doughnut";
+import { Doughnut } from "vue-chartjs/legacy";
 import { mapState } from "vuex";
 import colors from "vuetify/lib/util/colors";
 import { percentage } from "../../util";
@@ -63,6 +67,18 @@ export default {
   components: {
     ServerStatus,
     Doughnut,
+  },
+
+  data() {
+    return {
+      chartOptions: {
+        plugins: {
+          legend: {
+            display: false,
+          },
+        },
+      },
+    };
   },
 
   computed: {

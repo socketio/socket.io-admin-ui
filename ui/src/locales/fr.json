@@ -29,7 +29,15 @@
     "path": "Chemin HTTP"
   },
   "dashboard": {
-    "title": "Accueil"
+    "title": "Accueil",
+    "connectionsHistogram": {
+      "title": "Évènements de connexion et de déconnexion"
+    },
+    "bytesHistogram": {
+      "title": "Octets reçus et envoyés",
+      "bytesIn": "Octets reçus",
+      "bytesOut": "Octets envoyés"
+    }
   },
   "sockets": {
     "title": "Connexions",

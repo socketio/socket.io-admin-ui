@@ -154,6 +154,7 @@ export default {
       });
       socket.on("server_stats", (serverStats) => {
         this.$store.commit("servers/onServerStats", serverStats);
+        this.$store.commit("main/onServerStats", serverStats);
       });
       socket.on("all_sockets", (sockets) => {
         this.$store.commit("main/onAllSockets", sockets);

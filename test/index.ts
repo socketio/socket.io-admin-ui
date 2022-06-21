@@ -3,7 +3,7 @@ import { Server } from "socket.io";
 import { Server as ServerV3 } from "socket.io-v3";
 import { io as ioc } from "socket.io-client";
 import { AddressInfo } from "net";
-import { InMemoryStore, instrument, RedisStore } from "..";
+import { InMemoryStore, instrument, RedisStore } from "../lib";
 import expect = require("expect.js");
 import { createClient } from "redis";
 
@@ -189,6 +189,8 @@ describe("Socket.IO Admin (server instrumentation)", () => {
               "MJOIN",
               "MLEAVE",
               "MDISCONNECT",
+              "AGGREGATED_EVENTS",
+              "ALL_EVENTS",
             ]);
           } else {
             expect(config.supportedFeatures).to.eql([
@@ -196,6 +198,8 @@ describe("Socket.IO Admin (server instrumentation)", () => {
               "JOIN",
               "LEAVE",
               "DISCONNECT",
+              "AGGREGATED_EVENTS",
+              "ALL_EVENTS",
             ]);
           }
           adminSocket.disconnect();
@@ -212,7 +216,26 @@ describe("Socket.IO Admin (server instrumentation)", () => {
         const adminSocket = ioc(`http://localhost:${port}/admin`);
 
         adminSocket.on("config", (config: any) => {
-          expect(config.supportedFeatures).to.eql([]);
+          expect(config.supportedFeatures).to.eql([
+            "AGGREGATED_EVENTS",
+            "ALL_EVENTS",
+          ]);
+          adminSocket.disconnect();
+          done();
+        });
+      });
+
+      it("returns an empty list of supported features when in production mode", (done) => {
+        instrument(io, {
+          auth: false,
+          readonly: true,
+          mode: "production",
+        });
+
+        const adminSocket = ioc(`http://localhost:${port}/admin`);
+
+        adminSocket.on("config", (config: any) => {
+          expect(config.supportedFeatures).to.eql(["AGGREGATED_EVENTS"]);
           adminSocket.disconnect();
           done();
         });
