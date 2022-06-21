@@ -1,4 +1,7 @@
 module.exports = {
+
+  publicPath: "./",
+
   configureWebpack: {
     node: false, // remove buffer polyfill
   },
