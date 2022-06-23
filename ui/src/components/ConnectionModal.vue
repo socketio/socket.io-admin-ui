@@ -12,7 +12,7 @@
           <v-text-field
             v-model="serverUrl"
             :label="$t('connection.serverUrl')"
-            placeholder="https://example.com/admin"
+            placeholder="https://example.com"
             required
           ></v-text-field>
           <v-text-field
@@ -26,22 +26,39 @@
           ></v-text-field>
 
           <v-switch
-            v-model="wsOnly"
-            :label="$t('connection.websocket-only')"
+            v-model="showAdvancedOptions"
+            :label="$t('connection.advanced-options')"
             inset
             dense
           />
 
-          <v-text-field
-            v-model="path"
-            :label="$t('connection.path')"
-          ></v-text-field>
+          <v-expand-transition>
+            <div v-if="showAdvancedOptions">
+              <v-switch
+                v-model="wsOnly"
+                :label="$t('connection.websocket-only')"
+                inset
+                dense
+                v-show="showAdvancedOptions"
+              />
 
-          <v-select
-            v-model="parser"
-            :label="$t('connection.parser')"
-            :items="parserOptions"
-          />
+              <v-text-field
+                v-model="namespace"
+                :label="$t('connection.namespace')"
+              ></v-text-field>
+
+              <v-text-field
+                v-model="path"
+                :label="$t('connection.path')"
+              ></v-text-field>
+
+              <v-select
+                v-model="parser"
+                :label="$t('connection.parser')"
+                :items="parserOptions"
+              />
+            </div>
+          </v-expand-transition>
 
           <v-btn
             :loading="isConnecting"
@@ -69,15 +86,18 @@ export default {
     initialServerUrl: String,
     initialWsOnly: Boolean,
     initialPath: String,
+    initialNamespace: String,
     initialParser: String,
     error: String,
   },
 
   data() {
     return {
+      showAdvancedOptions: false,
       serverUrl: this.initialServerUrl,
       wsOnly: this.initialWsOnly,
       path: this.initialPath,
+      namespace: this.initialNamespace,
       username: "",
       password: "",
       parser: this.initialParser,
@@ -111,6 +131,7 @@ export default {
         serverUrl: this.serverUrl,
         wsOnly: this.wsOnly,
         path: this.path,
+        namespace: this.namespace,
         username: this.username,
         password: this.password,
         parser: this.parser,

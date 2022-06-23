@@ -26,7 +26,12 @@
     "invalid-credentials": "Identifiants invalides",
     "error": "Erreur",
     "websocket-only": "WebSocket uniquement ?",
-    "path": "Chemin HTTP"
+    "path": "Chemin HTTP",
+    "parser": "Encodeur",
+    "default-parser": "Encodeur par défaut",
+    "msgpack-parser": "Encodeur basé sur MessagePack",
+    "namespace": "Espace de nom d'administration",
+    "advanced-options": "Options avancées"
   },
   "dashboard": {
     "title": "Accueil",

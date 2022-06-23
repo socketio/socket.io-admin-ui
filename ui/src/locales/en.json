@@ -29,7 +29,9 @@
     "path": "Path",
     "parser": "Parser",
     "default-parser": "Built-in parser",
-    "msgpack-parser": "MessagePack parser"
+    "msgpack-parser": "MessagePack parser",
+    "namespace": "Admin namespace",
+    "advanced-options": "Advanced options"
   },
   "dashboard": {
     "title": "Dashboard",

@@ -17,6 +17,7 @@
       :initial-server-url="serverUrl"
       :initial-ws-only="wsOnly"
       :initial-path="path"
+      :initial-namespace="namespace"
       :initial-parser="parser"
       :is-connecting="isConnecting"
       :error="connectionError"
@@ -70,6 +71,7 @@ export default {
       serverUrl: (state) => state.connection.serverUrl,
       wsOnly: (state) => state.connection.wsOnly,
       path: (state) => state.connection.path,
+      namespace: (state) => state.connection.namespace,
       parser: (state) => state.connection.parser,
       backgroundColor: (state) =>
         state.config.darkTheme ? "" : "grey lighten-5",
@@ -92,7 +94,7 @@ export default {
   },
 
   methods: {
-    tryConnect(serverUrl, auth, wsOnly, path, parser) {
+    tryConnect(serverUrl, namespace, auth, wsOnly, path, parser) {
       this.isConnecting = true;
       if (SocketHolder.socket) {
         SocketHolder.socket.disconnect();
@@ -100,7 +102,7 @@ export default {
         SocketHolder.socket.off("connect_error");
         SocketHolder.socket.off("disconnect");
       }
-      const socket = io(serverUrl, {
+      const socket = io(serverUrl + namespace, {
         forceNew: true,
         reconnection: false,
         withCredentials: true, // needed for cookie-based sticky-sessions
@@ -119,6 +121,7 @@ export default {
           serverUrl,
           wsOnly,
           path,
+          namespace,
           parser,
         });
         SocketHolder.socket = socket;
@@ -210,6 +213,7 @@ export default {
     onSubmit(form) {
       this.tryConnect(
         form.serverUrl,
+        form.namespace,
         {
           username: form.username,
           password: form.password,
@@ -231,6 +235,7 @@ export default {
       const sessionId = this.$store.state.connection.sessionId;
       this.tryConnect(
         this.serverUrl,
+        this.namespace,
         {
           sessionId,
         },
