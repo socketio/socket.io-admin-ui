@@ -13,6 +13,7 @@
   - [`readonly`](#readonly)
   - [`serverId`](#serverid)
   - [`store`](#store)
+  - [`mode`](#mode)
 - [How it works](#how-it-works)
 - [License](#license)
 
@@ -64,7 +65,7 @@ You should see the following modal:
 
 ![login modal screenshot](assets/login-modal.png)
 
-Please enter the URL of your server, including the namespace (for example, `http://localhost:3000/admin` or `https://example.com/admin`) and the credentials, if applicable (see the `auth` option [below](#auth)).
+Please enter the URL of your server (for example, `http://localhost:3000` or `https://example.com`) and the credentials, if applicable (see the `auth` option [below](#auth)).
 
 ### Available options
 
@@ -171,6 +172,24 @@ const { instrument, RedisStore } = require("@socket.io/admin-ui");
 instrument(io, {
   store: new RedisStore(redisClient)
 });
+```
+
+#### `mode`
+
+Default value: `development`
+
+In production mode, the server won't send all details about the socket instances and the rooms, thus reducing the memory footprint of the instrumentation.
+
+```js
+instrument(io, {
+  mode: "production"
+});
+```
+
+The production mode can also be enabled with the NODE_ENV environment variable:
+
+```
+NODE_ENV=production node index.js
 ```
 
 ## How it works

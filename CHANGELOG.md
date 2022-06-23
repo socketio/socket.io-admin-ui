@@ -1,3 +1,21 @@
+# [0.4.0](https://github.com/socketio/socket.io-admin-ui/compare/0.3.0...0.4.0) (2022-06-23)
+
+
+### Bug Fixes
+
+* **ui:** properly set initial nav drawer state ([77ee068](https://github.com/socketio/socket.io-admin-ui/commit/77ee0683185aceababc4439a3a945e273d547944))
+
+
+### Features
+
+* add page displaying all events ([481ef22](https://github.com/socketio/socket.io-admin-ui/commit/481ef22b3aff37b40b142a29cb78e116d6d1e8e9))
+* add production mode ([e0d91ca](https://github.com/socketio/socket.io-admin-ui/commit/e0d91cadb11205c5f2c686c239a50cb2eef9795d))
+* display sent and received events ([8542601](https://github.com/socketio/socket.io-admin-ui/commit/8542601b55022f6ca00b677b7d7c7664a326526f))
+* **ui:** add support for relative links ([fdec2ce](https://github.com/socketio/socket.io-admin-ui/commit/fdec2ce17bf7cad77a04e8eef42a26104b6a05b8))
+* **ui:** separate the namespace from the server URL ([5a8a75e](https://github.com/socketio/socket.io-admin-ui/commit/3d4aed972f16dad3dd847d61f4db5e6f55978c4b))
+
+
+
 # [0.3.0](https://github.com/socketio/socket.io-admin-ui/compare/0.2.0...0.3.0) (2022-05-03)
 
 
