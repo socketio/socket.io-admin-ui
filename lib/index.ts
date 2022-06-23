@@ -365,6 +365,31 @@ const registerVerboseListeners = (
       });
     });
 
+    if (nsp !== adminNamespace) {
+      if (typeof socket.onAny === "function") {
+        socket.onAny((...args: any[]) => {
+          adminNamespace.emit(
+            "event_received",
+            nsp.name,
+            socket.id,
+            args,
+            new Date()
+          );
+        });
+      }
+      if (typeof socket.onAnyOutgoing === "function") {
+        socket.onAnyOutgoing((...args: any[]) => {
+          adminNamespace.emit(
+            "event_sent",
+            nsp.name,
+            socket.id,
+            args,
+            new Date()
+          );
+        });
+      }
+    }
+
     socket.on("disconnect", (reason: string) => {
       adminNamespace.emit(
         "socket_disconnected",

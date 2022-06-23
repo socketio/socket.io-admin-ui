@@ -98,7 +98,13 @@
       "connection": "Connexion",
       "disconnection": "Déconnexion",
       "room_joined": "Salle rejointe",
-      "room_left": "Salle quittée"
-    }
+      "room_left": "Salle quittée",
+      "event_received": "Évènement reçu",
+      "event_sent": "Évènement envoyé"
+    },
+    "eventName": "Nom de l'évènement",
+    "eventArgs": "Argument de l'évènement",
+    "reason": "Raison",
+    "room": "Salle"
   }
 }

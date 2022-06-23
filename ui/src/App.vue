@@ -194,6 +194,17 @@ export default {
           this.$store.commit("main/onRoomLeft", { timestamp, nsp, room, id });
         }
       );
+      socket.on("event_received", (nsp, id, args, timestamp) => {
+        this.$store.commit("main/onEventReceived", {
+          timestamp,
+          nsp,
+          id,
+          args,
+        });
+      });
+      socket.on("event_sent", (nsp, id, args, timestamp) => {
+        this.$store.commit("main/onEventSent", { timestamp, nsp, id, args });
+      });
     },
 
     onSubmit(form) {

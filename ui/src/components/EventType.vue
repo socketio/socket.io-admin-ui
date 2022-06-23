@@ -25,6 +25,10 @@ export default {
           return colors.amber.base;
         case "disconnection":
           return colors.red.base;
+        case "event_received":
+          return colors.blue.base;
+        case "event_sent":
+          return colors.orange.base;
       }
       return colors.gray.base;
     },

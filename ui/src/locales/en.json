@@ -101,7 +101,13 @@
       "connection": "Connection",
       "disconnection": "Disconnection",
       "room_joined": "Room joined",
-      "room_left": "Room left"
-    }
+      "room_left": "Room left",
+      "event_received": "Event received",
+      "event_sent": "Event sent"
+    },
+    "eventName": "Event name",
+    "eventArgs": "Event arguments",
+    "reason": "Reason",
+    "room": "Room"
   }
 }

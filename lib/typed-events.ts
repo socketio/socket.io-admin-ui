@@ -63,6 +63,13 @@ export interface ServerEvents {
   ) => void;
   room_joined: (nsp: string, room: string, id: string, timestamp: Date) => void;
   room_left: (nsp: string, room: string, id: string, timestamp: Date) => void;
+  event_received: (
+    nsp: string,
+    id: string,
+    args: any[],
+    timestamp: Date
+  ) => void;
+  event_sent: (nsp: string, id: string, args: any[], timestamp: Date) => void;
 }
 
 export interface ClientEvents {

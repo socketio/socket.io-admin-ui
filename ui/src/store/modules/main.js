@@ -234,5 +234,27 @@ export default {
         return elem.timestamp < Date.now() - TEN_MINUTES;
       });
     },
+    onEventReceived(state, { timestamp, nsp, id, args }) {
+      const namespace = getOrCreateNamespace(state.namespaces, nsp);
+      const eventName = args.shift();
+      pushEvents(namespace.events, {
+        type: "event_received",
+        timestamp,
+        id,
+        eventName,
+        args,
+      });
+    },
+    onEventSent(state, { timestamp, nsp, id, args }) {
+      const namespace = getOrCreateNamespace(state.namespaces, nsp);
+      const eventName = args.shift();
+      pushEvents(namespace.events, {
+        type: "event_sent",
+        timestamp,
+        id,
+        eventName,
+        args,
+      });
+    },
   },
 };
