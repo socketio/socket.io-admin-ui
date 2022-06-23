@@ -12,24 +12,15 @@
           <tr>
             <td class="key-column">{{ $t("id") }}</td>
             <td>
-              {{ client.id }}
+              <router-link
+                v-if="client.connected"
+                class="link"
+                :to="toClient"
+                >{{ client.id }}</router-link
+              >
+              <span v-else>{{ client.id }}</span>
             </td>
-            <td align="right">
-              <v-tooltip bottom v-if="client.connected">
-                <template v-slot:activator="{ on, attrs }">
-                  <v-btn
-                    v-bind="attrs"
-                    v-on="on"
-                    @click="navigateToClient()"
-                    small
-                    class="ml-3"
-                  >
-                    <v-icon>mdi-dots-horizontal</v-icon>
-                  </v-btn>
-                </template>
-                <span>{{ $t("clients.displayDetails") }}</span>
-              </v-tooltip>
-            </td>
+            <td></td>
           </tr>
           <tr>
             <td class="key-column">{{ $t("status") }}</td>
@@ -154,6 +145,14 @@ export default {
   },
 
   computed: {
+    toClient() {
+      return {
+        name: "client",
+        params: {
+          id: this.client.id,
+        },
+      };
+    },
     creationDate() {
       return new Date(this.socket.handshake.issued).toISOString();
     },
@@ -196,5 +195,9 @@ export default {
 <style scoped>
 .key-column {
   width: 30%;
+}
+
+.link {
+  color: inherit;
 }
 </style>

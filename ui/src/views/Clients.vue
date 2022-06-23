@@ -7,6 +7,8 @@
         :headers="headers"
         :items="clients"
         :footer-props="footerProps"
+        class="row-pointer"
+        @click:row="displayDetails"
       >
         <template v-slot:item.address="{ item }">
           <span v-if="item.sockets.length">{{
@@ -40,21 +42,6 @@
               </v-btn>
             </template>
             <span>{{ $t("clients.disconnect") }}</span>
-          </v-tooltip>
-
-          <v-tooltip bottom>
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn
-                v-bind="attrs"
-                v-on="on"
-                @click="displayDetails(item)"
-                small
-                class="ml-3"
-              >
-                <v-icon>mdi-dots-horizontal</v-icon>
-              </v-btn>
-            </template>
-            <span>{{ $t("clients.displayDetails") }}</span>
           </v-tooltip>
         </template>
       </v-data-table>
@@ -136,3 +123,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.row-pointer >>> tbody > tr:hover {
+  cursor: pointer;
+}
+</style>

@@ -2,8 +2,10 @@
   <v-card>
     <v-card-title class="text-center">
       {{ $t("clients.title") }}
+
       <v-spacer />
-      <v-btn :to="{ name: 'clients' }" small>
+
+      <v-btn v-if="developmentMode" :to="{ name: 'clients' }" small>
         <v-icon>mdi-dots-horizontal</v-icon>
       </v-btn>
     </v-card-title>
@@ -80,7 +82,7 @@ export default {
       darkTheme: (state) => state.config.darkTheme,
       servers: (state) => state.servers.servers,
     }),
-    ...mapGetters("config", ["hasAggregatedValues"]),
+    ...mapGetters("config", ["hasAggregatedValues", "developmentMode"]),
 
     clientsCount() {
       if (this.hasAggregatedValues) {

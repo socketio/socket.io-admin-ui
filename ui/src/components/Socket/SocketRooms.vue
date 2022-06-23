@@ -1,7 +1,13 @@
 <template>
   <v-card class="fill-height">
     <v-card-title>{{ $t("rooms.title") }}</v-card-title>
-    <v-data-table :headers="headers" :items="roomsAsObjects" dense>
+    <v-data-table
+      :headers="headers"
+      :items="roomsAsObjects"
+      dense
+      class="row-pointer"
+      @click:row="displayDetails"
+    >
       <template v-slot:item.actions="{ item }">
         <v-tooltip bottom v-if="isSocketLeaveSupported">
           <template v-slot:activator="{ on, attrs }">
@@ -17,21 +23,6 @@
             </v-btn>
           </template>
           <span>{{ $t("sockets.leave") }}</span>
-        </v-tooltip>
-
-        <v-tooltip bottom>
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn
-              v-bind="attrs"
-              v-on="on"
-              @click="displayDetails(item)"
-              small
-              class="ml-3"
-            >
-              <v-icon>mdi-dots-horizontal</v-icon>
-            </v-btn>
-          </template>
-          <span>{{ $t("rooms.displayDetails") }}</span>
         </v-tooltip>
       </template>
     </v-data-table>
@@ -169,5 +160,8 @@ export default {
 <style scoped>
 .select-room {
   max-width: 200px;
+}
+.row-pointer >>> tbody > tr:hover {
+  cursor: pointer;
 }
 </style>

@@ -6,6 +6,8 @@
       :headers="headers"
       :items="room.sockets"
       :footer-props="footerProps"
+      class="row-pointer"
+      @click:row="displayDetails"
     >
       <template v-slot:item.transport="{ value }">
         <Transport :transport="value" />
@@ -41,21 +43,6 @@
             </v-btn>
           </template>
           <span>{{ $t("sockets.disconnect") }}</span>
-        </v-tooltip>
-
-        <v-tooltip bottom>
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn
-              v-bind="attrs"
-              v-on="on"
-              @click="displayDetails(item)"
-              small
-              class="ml-3"
-            >
-              <v-icon>mdi-dots-horizontal</v-icon>
-            </v-btn>
-          </template>
-          <span>{{ $t("sockets.displayDetails") }}</span>
         </v-tooltip>
       </template>
     </v-data-table>
@@ -145,3 +132,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.row-pointer >>> tbody > tr:hover {
+  cursor: pointer;
+}
+</style>

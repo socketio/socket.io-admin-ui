@@ -2,8 +2,10 @@
   <v-card class="fill-height">
     <v-card-title class="text-center">
       {{ $t("namespaces") }}
+
       <v-spacer />
-      <v-btn :to="{ name: 'sockets' }" small>
+
+      <v-btn v-if="developmentMode" :to="{ name: 'sockets' }" small>
         <v-icon>mdi-dots-horizontal</v-icon>
       </v-btn>
     </v-card-title>
@@ -46,7 +48,7 @@ export default {
           };
         }),
     }),
-    ...mapGetters("config", ["hasAggregatedValues"]),
+    ...mapGetters("config", ["hasAggregatedValues", "developmentMode"]),
     ...mapGetters("servers", {
       liteNamespaces: "namespaces",
     }),

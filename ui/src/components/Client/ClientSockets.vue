@@ -2,7 +2,13 @@
   <v-card>
     <v-card-title>{{ $t("sockets.title") }}</v-card-title>
 
-    <v-data-table :headers="headers" :items="sockets" dense>
+    <v-data-table
+      :headers="headers"
+      :items="sockets"
+      dense
+      class="row-pointer"
+      @click:row="displayDetails"
+    >
       <template v-slot:item.nsp="{ value }">
         <code>{{ value }}</code>
       </template>
@@ -22,21 +28,6 @@
             </v-btn>
           </template>
           <span>{{ $t("sockets.disconnect") }}</span>
-        </v-tooltip>
-
-        <v-tooltip bottom>
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn
-              v-bind="attrs"
-              v-on="on"
-              @click="displayDetails(item)"
-              small
-              class="ml-3"
-            >
-              <v-icon>mdi-dots-horizontal</v-icon>
-            </v-btn>
-          </template>
-          <span>{{ $t("sockets.displayDetails") }}</span>
         </v-tooltip>
       </template>
     </v-data-table>
@@ -93,3 +84,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.row-pointer >>> tbody > tr:hover {
+  cursor: pointer;
+}
+</style>
