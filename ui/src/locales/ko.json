@@ -14,6 +14,9 @@
   "status": "상태",
   "connected": "연결됨",
   "disconnected": "연결되지 않음",
+  "data": "데이터",
+  "timestamp": "타임스탬프",
+  "args": "전달 인자 (Arguments)",
   "connection": {
     "title": "접속",
     "serverUrl": "서버 URL",
@@ -21,10 +24,25 @@
     "password": "비밀번호 (Password)",
     "connect": "접속하기",
     "invalid-credentials": "올바르지 않은 인증",
-    "error": "에러"
+    "error": "에러",
+    "websocket-only": "웹소켓 전용?",
+    "path": "경로",
+    "parser": "파서 (Parser)",
+    "default-parser": "Built-in parser",
+    "msgpack-parser": "MessagePack parser",
+    "namespace": "관리자 네임 스페이스",
+    "advanced-options": "고급 옵션"
   },
   "dashboard": {
-    "title": "대시보드"
+    "title": "대시보드",
+    "connectionsHistogram": {
+      "title": "Connection 및 Disconnection 이벤트"
+    },
+    "bytesHistogram": {
+      "title": "수신 및 전송된 바이트",
+      "bytesIn": "수신된 바이트",
+      "bytesOut": "전송된 바이트"
+    }
   },
   "sockets": {
     "title": "소켓",
@@ -78,5 +96,20 @@
     "language": "언어",
     "readonly": "읽기 전용?",
     "dark-theme": "다크 테마?"
+  },
+  "events": {
+    "title": "이벤트",
+    "type": {
+      "connection": "연결 (Connection)",
+      "disconnection": "연결 해제 (Disconnection)",
+      "room_joined": "참여중인 룸(Room joined)",
+      "room_left": "나간 룸(Room left)",
+      "event_received": "수신한 이벤트",
+      "event_sent": "전송한 이벤트"
+    },
+    "eventName": "이벤트 이름",
+    "eventArgs": "이벤트 전달 인자 (Event Arguments)",
+    "reason": "원인 (Reason)",
+    "room": "룸"
   }
 }
