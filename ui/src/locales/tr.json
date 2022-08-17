@@ -1,0 +1,116 @@
+{
+    "separator": ": ",
+    "id": "ID",
+    "update": "Güncelle",
+    "details": "Detaylar",
+    "actions": "Hareketler",
+    "select-namespace": "Namespace seç",
+    "namespace": "Namespace",
+    "namespaces": "Namespaceler",
+    "disconnect": "Bağlantıyı Kes",
+    "name": "Ad",
+    "value": "Değer",
+    "type": "Tip",
+    "status": "Durum",
+    "connected": "bağlandı",
+    "disconnected": "bağlantı kesildi",
+    "data": "Ver,",
+    "timestamp": "Zaman dilimi",
+    "args": "Argümanlar",
+    "connection": {
+      "title": "Bağlantı",
+      "serverUrl": "Server URL",
+      "username": "Kullanıcı Adı",
+      "password": "Şifre",
+      "connect": "Bağlan",
+      "invalid-credentials": "Geçersiz kimlik bilgileri",
+      "error": "Hata",
+      "websocket-only": "Yalnızca WebSocket?",
+      "path": "Yol",
+      "parser": "Derleyici",
+      "default-parser": "Yerleşik Derleyici",
+      "msgpack-parser": "MessagePack Derleyici",
+      "namespace": "Admin namespace",
+      "advanced-options": "Gelişmiş Seçenekler"
+    },
+    "dashboard": {
+      "title": "Gösterge Panneli",
+      "connectionsHistogram": {
+        "title": "Bağlantı ve bağlantı kesilmesi olayları"
+      },
+      "bytesHistogram": {
+        "title": "Alınan ve gönderilen baytlar",
+        "bytesIn": "Alınan baytlar",
+        "bytesOut": "gönderilen baytlar"
+      }
+    },
+    "sockets": {
+      "title": "Socketler",
+      "details": "Socket detayları",
+      "address": "IP adresi",
+      "transport": "Ulaşım",
+      "disconnect": "Bu Socket'in bağlantısını kesin",
+      "displayDetails": "Bu Socket'in ayrıntılarını görüntüle",
+      "client": "Alıcı",
+      "socket": "Socket",
+      "creation-date": "Oluşturma tarihi",
+      "leave": "Bu odadan ayrıl",
+      "join": "Katıl",
+      "join-a-room": "Odaya katıl",
+      "initial-request": "İlk HTTP isteği",
+      "headers": "Header'lar",
+      "query-params": "Query parametreleri"
+    },
+    "rooms": {
+      "title": "Oda",
+      "details": "Oda detayları",
+      "active": "Aktif",
+      "deleted": "Silinmiş",
+      "public": "Herkese açık",
+      "private": "Gizli",
+      "show-private": "Gizli odaları göstermek ister misin",
+      "sockets-count": "# socketlerin",
+      "clear": "Bu odadaki tüm Socketleri kaldırın",
+      "leave": "Socketi bu odadan kaldır",
+      "disconnect": "Bu odadaki Socketlerin bağlantısını kesin",
+      "displayDetails": "Bu odanın ayrıntılarını göster"
+    },
+    "clients": {
+      "title": "Alıcı",
+      "details": "Alıcı detayları",
+      "sockets-count": "# socketlerin",
+      "disconnect": "Bu istemcinin (ve tüm bağlı Socketlerin) bağlantısını kesin",
+      "displayDetails": "Bu istemcinin ayrıntılarını göster"
+    },
+    "servers": {
+      "title": "Servers",
+      "hostname": "Host Adı",
+      "pid": "PID",
+      "uptime": "Çalışma Süresi",
+      "clients-count": "# alıcılar",
+      "last-ping": "Son ping",
+      "healthy": "Sağlıklı",
+      "unhealthy": "Sağlıksız"
+    },
+    "config": {
+      "language": "Dil",
+      "readonly": "Sadece okuma modu",
+      "dark-theme": "Koyu Tema"
+    },
+    "events": {
+      "title": "Etkinlikler",
+      "type": {
+        "connection": "Bağlandı",
+        "disconnection": "Bağlantıyı Kesildi",
+        "room_joined": "Oda katıldı",
+        "room_left": "Oda Ayrıldı",
+        "event_received": "Olay alındı",
+        "event_sent": "Olay gönderildi"
+      },
+      "eventName": "Etkinlik Adı",
+      "eventArgs": "Etkinlik argümanları",
+      "reason": "Neden",
+      "room": "Oda"
+    }
+  }
+  
