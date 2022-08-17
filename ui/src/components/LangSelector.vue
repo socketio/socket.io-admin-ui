@@ -30,12 +30,16 @@ export default {
           value: "fr",
         },
         {
+          text: "한국어",
+          value: "ko",
+        },
+        {
           text: "Português (Brazil)",
           value: "pt-BR",
         },
         {
-          text: "한국어",
-          value: "ko",
+          text: "Türkçe",
+          value: "tr",
         },
         {
           text: "简体中文",
