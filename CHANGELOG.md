@@ -1,3 +1,14 @@
+# [0.5.0](https://github.com/socketio/socket.io-admin-ui/compare/0.4.0...0.5.0) (2022-09-19)
+
+
+### Features
+
+* **server:** switch to the bcryptjs module ([81af1d4](https://github.com/socketio/socket.io-admin-ui/commit/81af1d40ae91b6f83e45b505a609b7ec25a75115))
+* **ui:** add tr locale ([#52](https://github.com/socketio/socket.io-admin-ui/issues/52)) ([7e36532](https://github.com/socketio/socket.io-admin-ui/commit/7e365322421bbfd28f01ad8a1065025ede054ecf))
+* **ui:** update ko locale ([#51](https://github.com/socketio/socket.io-admin-ui/issues/51)) ([2226f7b](https://github.com/socketio/socket.io-admin-ui/commit/2226f7bcd97461902f9dac4f44a7ed62f804f188))
+
+
+
 # [0.4.0](https://github.com/socketio/socket.io-admin-ui/compare/0.3.0...0.4.0) (2022-06-23)
 
 
