@@ -9,6 +9,7 @@
     "i18n:report": "vue-cli-service i18n:report --src \"./src/**/*.?(js|vue)\" --locales \"./src/locales/**/*.json\""
   },
   "dependencies": {
+    "chart.js": "^3.9.1",
     "chartjs-adapter-date-fns": "^2.0.0",
     "core-js": "^3.6.5",
     "date-fns": "^2.28.0",
