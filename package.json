@@ -32,8 +32,8 @@
   },
   "homepage": "https://github.com/socketio/socket.io-admin-ui#readme",
   "dependencies": {
-    "@types/bcrypt": "~3.0.0",
-    "bcrypt": "~5.0.1",
+    "@types/bcryptjs": "^2.4.2",
+    "bcryptjs": "^2.4.3",
     "debug": "~4.3.1"
   },
   "peerDependencies": {
