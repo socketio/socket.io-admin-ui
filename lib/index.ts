@@ -368,6 +368,10 @@ const registerVerboseListeners = (
     if (nsp !== adminNamespace) {
       if (typeof socket.onAny === "function") {
         socket.onAny((...args: any[]) => {
+          const withAck = typeof args[args.length - 1] === "function";
+          if (withAck) {
+            args = args.slice(0, -1);
+          }
           adminNamespace.emit(
             "event_received",
             nsp.name,

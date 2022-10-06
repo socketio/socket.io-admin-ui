@@ -11,7 +11,7 @@
   "scripts": {
     "compile": "tsc",
     "test": "npm run format:check && npm run compile && npm run test:unit",
-    "test:unit": "nyc mocha --require ts-node/register --timeout 5000 test/index.ts --quit",
+    "test:unit": "nyc mocha --require ts-node/register --timeout 5000 test/*.ts --quit",
     "format:check": "prettier --parser typescript --check 'lib/**/*.ts' 'test/**/*.ts'",
     "format:fix": "prettier --parser typescript --write 'lib/**/*.ts' 'test/**/*.ts'",
     "prepack": "npm run compile"
