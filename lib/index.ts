@@ -142,7 +142,7 @@ const initStatsEmitter = (
       "server_stats",
       Object.assign({}, baseStats, {
         uptime: process.uptime(),
-        clientsCount: io.engine.clientsCount,
+        clientsCount: io.engine?.clientsCount,
         pollingClientsCount: io._pollingClientsCount,
         aggregatedEvents: io._eventBuffer.getValuesAndClear(),
         namespaces,
@@ -489,7 +489,7 @@ const registerEngineListeners = (io: Server) => {
   io._eventBuffer = new EventBuffer();
   io._pollingClientsCount = 0;
 
-  io.engine.on("connection", (rawSocket: any) => {
+  const onConnection = (rawSocket: any) => {
     io._eventBuffer.push("rawConnection");
 
     if (rawSocket.transport.name === "polling") {
@@ -524,7 +524,20 @@ const registerEngineListeners = (io: Server) => {
     rawSocket.on("close", (reason: string) => {
       io._eventBuffer.push("rawDisconnection", reason);
     });
-  });
+  };
+
+  if (io.engine) {
+    io.engine.on("connection", onConnection);
+  } else {
+    // io.engine might be undefined if instrument() is called before binding the Socket.IO server to the HTTP server
+    process.nextTick(() => {
+      if (io.engine) {
+        io.engine.on("connection", onConnection);
+      } else {
+        debug("WARN: no engine");
+      }
+    });
+  }
 };
 
 export function instrument(io: Server, opts: Partial<InstrumentOptions>) {

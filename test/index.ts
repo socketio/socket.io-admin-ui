@@ -67,6 +67,17 @@ describe("Socket.IO Admin (server instrumentation)", () => {
         });
       });
 
+      it("should work with io.listen()", () => {
+        const io = new Server();
+
+        instrument(io, {
+          auth: false,
+        });
+
+        io.listen(0);
+        io.close();
+      });
+
       describe("authentication", () => {
         it("prevents anonymous connection", (done) => {
           instrument(io, {
