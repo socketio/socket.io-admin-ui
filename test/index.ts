@@ -19,10 +19,12 @@ const sleep = (duration: number) =>
   new Promise((resolve) => setTimeout(resolve, duration));
 
 describe("Socket.IO Admin (server instrumentation)", () => {
-  ([
-    ["v4", Server],
-    ["v3", ServerV3],
-  ] as [string, typeof Server][]).forEach(([version, ServerConstructor]) => {
+  (
+    [
+      ["v4", Server],
+      ["v3", ServerV3],
+    ] as [string, typeof Server][]
+  ).forEach(([version, ServerConstructor]) => {
     describe(`Socket.IO ${version}`, () => {
       let port: number, io: Server;
 
