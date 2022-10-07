@@ -1,3 +1,13 @@
+## [0.5.1](https://github.com/socketio/socket.io-admin-ui/compare/0.5.0...0.5.1) (2022-10-07)
+
+
+### Bug Fixes
+
+* **server:** handle late HTTP server binding ([b21b649](https://github.com/socketio/socket.io-admin-ui/commit/b21b649ea246eec87af121ffe676c876b001de05))
+* **server:** properly track events with acknowledgement ([6d58a75](https://github.com/socketio/socket.io-admin-ui/commit/6d58a755b4d692970d3f2066903a4d503f334f0a))
+
+
+
 # [0.5.0](https://github.com/socketio/socket.io-admin-ui/compare/0.4.0...0.5.0) (2022-09-19)
 
 
