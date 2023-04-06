@@ -65,7 +65,7 @@ export class RedisStore extends Store {
     const key = this.computeKey(sessionId);
     this.redisClient
       .multi()
-      .set(key, true)
+      .set(key, "true")
       .expire(key, this.options.sessionDuration)
       .exec();
   }
