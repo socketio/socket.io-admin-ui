@@ -594,4 +594,4 @@ export function instrument(io: Server, opts: Partial<InstrumentOptions>) {
   initStatsEmitter(adminNamespace, options.serverId);
 }
 
-export { InMemoryStore, RedisStore } from "./stores";
+export { InMemoryStore, RedisStore, RedisV4Store } from "./stores";

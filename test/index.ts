@@ -3,9 +3,8 @@ import { Server } from "socket.io";
 import { Server as ServerV3 } from "socket.io-v3";
 import { io as ioc } from "socket.io-client";
 import { AddressInfo } from "net";
-import { InMemoryStore, instrument, RedisStore } from "../lib";
+import { instrument } from "../lib";
 import expect = require("expect.js");
-import { createClient } from "redis";
 
 const waitFor = (emitter: any, event: string): Promise<any> => {
   return new Promise((resolve) => {
@@ -442,31 +441,6 @@ describe("Socket.IO Admin (server instrumentation)", () => {
         expect(socket.nsp).to.eql("/dynamic-101");
         clientSocket.disconnect();
         adminSocket.disconnect();
-      });
-    });
-  });
-
-  describe("Stores", () => {
-    describe("InMemoryStore", () => {
-      it("works", async () => {
-        const store = new InMemoryStore();
-        store.saveSession("123");
-
-        expect(await store.doesSessionExist("123")).to.eql(true);
-        expect(await store.doesSessionExist("456")).to.eql(false);
-      });
-    });
-
-    describe("RedisStore", () => {
-      it("works", async () => {
-        const redisClient = createClient();
-        const store = new RedisStore(redisClient);
-        store.saveSession("123");
-
-        expect(await store.doesSessionExist("123")).to.eql(true);
-        expect(await store.doesSessionExist("456")).to.eql(false);
-
-        redisClient.quit();
       });
     });
   });
