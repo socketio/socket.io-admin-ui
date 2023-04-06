@@ -62,12 +62,12 @@ export class RedisStore extends Store {
   }
 
   saveSession(sessionId: string) {
-    const key = this.computeKey(sessionId);
-    this.redisClient
-      .multi()
-      .set(key, true)
-      .expire(key, this.options.sessionDuration)
-      .exec();
+    this.redisClient.set(
+      this.computeKey(sessionId),
+      "1",
+      "EX",
+      "" + this.options.sessionDuration
+    );
   }
 }
 
