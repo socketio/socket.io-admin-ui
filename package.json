@@ -1,6 +1,6 @@
 {
-  "name": "@yarikpetrenko/socket.io-admin-ui",
-  "version": "0.5.2",
+  "name": "@socket.io/admin-ui",
+  "version": "0.5.1",
   "description": "Admin UI for Socket.IO",
   "files": [
     "dist/",
