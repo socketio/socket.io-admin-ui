@@ -30,6 +30,7 @@
     "parser": "파서 (Parser)",
     "default-parser": "Built-in parser",
     "msgpack-parser": "MessagePack parser",
+    "devalue-parser": "devalue parser",
     "namespace": "관리자 네임 스페이스",
     "advanced-options": "고급 옵션"
   },

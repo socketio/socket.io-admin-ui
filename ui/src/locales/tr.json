@@ -30,6 +30,7 @@
       "parser": "Derleyici",
       "default-parser": "Yerleşik Derleyici",
       "msgpack-parser": "MessagePack Derleyici",
+      "devalue-parser": "devalue Derleyici",
       "namespace": "Admin namespace",
       "advanced-options": "Gelişmiş Seçenekler"
     },

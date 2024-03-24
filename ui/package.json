@@ -14,6 +14,7 @@
     "core-js": "^3.6.5",
     "date-fns": "^2.28.0",
     "socket.io-msgpack-parser": "^3.0.1",
+    "@socket.io/devalue-parser": "^0.1.0",
     "vue": "^2.6.11",
     "vue-chartjs": "^4.1.1",
     "vue-i18n": "^8.22.3",

@@ -110,6 +110,10 @@ export default {
           value: "msgpack",
           text: this.$t("connection.msgpack-parser"),
         },
+        {
+          value: "devalue",
+          text: this.$t("connection.devalue-parser"),
+        }
       ],
     };
   },

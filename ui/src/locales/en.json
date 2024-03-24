@@ -30,6 +30,7 @@
     "parser": "Parser",
     "default-parser": "Built-in parser",
     "msgpack-parser": "MessagePack parser",
+    "devalue-parser": "devalue parser",
     "namespace": "Admin namespace",
     "advanced-options": "Advanced options"
   },

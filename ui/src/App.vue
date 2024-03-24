@@ -31,6 +31,7 @@ import AppBar from "./components/AppBar";
 import NavigationDrawer from "./components/NavigationDrawer";
 import { io } from "socket.io-client";
 import msgpackParser from "socket.io-msgpack-parser";
+import devalueParser from "socket.io-msgpack-parser";
 import ConnectionModal from "./components/ConnectionModal";
 import SocketHolder from "./SocketHolder";
 import { mapState } from "vuex";
@@ -108,7 +109,7 @@ export default {
         withCredentials: true, // needed for cookie-based sticky-sessions
         transports: wsOnly ? ["websocket"] : ["polling", "websocket"],
         path,
-        parser: parser === "msgpack" ? msgpackParser : null,
+        parser: parser === "msgpack" ? msgpackParser : parser === "devalue" ? devalueParser : null,
         auth,
       });
       socket.once("connect", () => {

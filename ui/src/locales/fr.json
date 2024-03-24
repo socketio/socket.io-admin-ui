@@ -30,6 +30,7 @@
     "parser": "Encodeur",
     "default-parser": "Encodeur par défaut",
     "msgpack-parser": "Encodeur basé sur MessagePack",
+    "devalue-parser": "Encodeur basé sur devalue",
     "namespace": "Espace de nom d'administration",
     "advanced-options": "Options avancées"
   },
