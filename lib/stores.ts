@@ -62,11 +62,40 @@ export class RedisStore extends Store {
   }
 
   saveSession(sessionId: string) {
-    const key = this.computeKey(sessionId);
-    this.redisClient
-      .multi()
-      .set(key, true)
-      .expire(key, this.options.sessionDuration)
-      .exec();
+    this.redisClient.set(
+      this.computeKey(sessionId),
+      "1",
+      "EX",
+      "" + this.options.sessionDuration
+    );
+  }
+}
+
+export class RedisV4Store extends Store {
+  private options: RedisStoreOptions;
+
+  constructor(readonly redisClient: any, options?: Partial<RedisStoreOptions>) {
+    super();
+    this.options = Object.assign(
+      {
+        prefix: "socket.io-admin",
+        sessionDuration: 86400,
+      },
+      options
+    );
+  }
+
+  private computeKey(sessionId: string) {
+    return `${this.options.prefix}#${sessionId}`;
+  }
+
+  doesSessionExist(sessionId: string): Promise<boolean> {
+    return this.redisClient.exists(this.computeKey(sessionId));
+  }
+
+  saveSession(sessionId: string) {
+    return this.redisClient.set(this.computeKey(sessionId), "1", {
+      EX: this.options.sessionDuration,
+    });
   }
 }
