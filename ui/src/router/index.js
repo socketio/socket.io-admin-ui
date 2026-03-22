@@ -1,16 +1,13 @@
-import Vue from "vue";
-import VueRouter from "vue-router";
-import Dashboard from "../views/Dashboard";
-import Sockets from "../views/Sockets";
-import Socket from "../views/Socket";
-import Rooms from "../views/Rooms";
-import Clients from "../views/Clients";
-import Client from "../views/Client";
-import Servers from "../views/Servers";
-import Room from "../views/Room";
-import Events from "@/views/Events";
-
-Vue.use(VueRouter);
+import { createRouter, createWebHashHistory } from "vue-router";
+import Dashboard from "../views/Dashboard.vue";
+import Sockets from "../views/Sockets.vue";
+import Socket from "../views/Socket.vue";
+import Rooms from "../views/Rooms.vue";
+import Clients from "../views/Clients.vue";
+import Client from "../views/Client.vue";
+import Servers from "../views/Servers.vue";
+import Room from "../views/Room.vue";
+import Events from "@/views/Events.vue";
 
 const routes = [
   {
@@ -93,9 +90,8 @@ const routes = [
   },
 ];
 
-const router = new VueRouter({
-  mode: "hash",
-  base: process.env.BASE_URL,
+const router = createRouter({
+  history: createWebHashHistory(),
   routes,
 });
 

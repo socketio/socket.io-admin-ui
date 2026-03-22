@@ -1,0 +1,56 @@
+@import "tailwindcss/theme" layer(tailwind.theme);
+@import "tailwindcss/utilities" layer(tailwind.utilities);
+
+@theme {
+  /* ─ צבעים מ-Vuetify theme ─ */
+  --color-primary: rgb(var(--v-theme-primary));
+  --color-secondary: rgb(var(--v-theme-secondary));
+  --color-success: rgb(var(--v-theme-success));
+  --color-warning: rgb(var(--v-theme-warning));
+  --color-error: rgb(var(--v-theme-error));
+  --color-info: rgb(var(--v-theme-info));
+  --color-background: rgb(var(--v-theme-background));
+  --color-surface: rgb(var(--v-theme-surface));
+  --color-on-surface: rgb(var(--v-theme-on-surface));
+  --color-on-primary: rgb(var(--v-theme-on-primary));
+
+  /* ─ Radius מיושר עם Vuetify ─ */
+  --radius-sm: 2px;
+  --radius-lg: 8px;
+  --radius-xl: 24px;
+
+  /* ─ Breakpoints מיושרים עם Vuetify ─ */
+  --breakpoint-*: initial;
+  --breakpoint-xs: 0px;
+  --breakpoint-sm: 400px;
+  --breakpoint-md: 840px;
+  --breakpoint-lg: 1145px;
+  --breakpoint-xl: 1545px;
+  --breakpoint-xxl: 2138px;
+}
+
+/* ── Dark/Light variants שעובדים עם Vuetify ── */
+@custom-variant light (&:where(.v-theme--light, .v-theme--light *));
+@custom-variant dark (&:where(.v-theme--dark, .v-theme--dark *));
+
+/* ── Utilities של Vuetify שאין ב-Tailwind ── */
+@utility rounded-0    { border-radius: 0; }
+@utility rounded-pill { border-radius: 9999px; }
+
+/* ── Safelist צבעי theme (שאין להם reference בטמפלייט) ── */
+@source inline("bg-primary");
+@source inline("bg-secondary");
+@source inline("bg-success");
+@source inline("bg-warning");
+@source inline("bg-error");
+@source inline("bg-info");
+@source inline("text-primary");
+@source inline("text-secondary");
+@source inline("text-success");
+@source inline("text-warning");
+@source inline("text-error");
+@source inline("text-info");
+@source inline("bg-surface");
+@source inline("bg-background");
+@source inline("text-on-surface");
+@source inline("text-on-primary");

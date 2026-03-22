@@ -1,58 +1,50 @@
 <template>
   <div>
-    <v-breadcrumbs :items="breadcrumbItems" />
-
-    <v-container v-if="room" fluid>
-      <v-row>
-        <v-col sm="12" md="4">
-          <RoomDetails :room="room" :nsp="$route.params.nsp" />
-        </v-col>
-
-        <v-col sm="12" md="8">
-          <RoomSockets :room="room" />
-        </v-col>
-      </v-row>
-    </v-container>
+    <v-breadcrumbs :items="breadcrumbs" />
+    <v-row v-if="room">
+      <v-col cols="12" md="4">
+        <v-card>
+          <v-card-title>{{ $t("rooms.details") }}</v-card-title>
+          <v-table>
+            <tbody>
+              <tr><td>ID</td><td>{{ room.name }}</td></tr>
+              <tr><td>{{ $t("status") }}</td><td><RoomStatus :active="room.active" /></td></tr>
+              <tr><td>Namespace</td><td>{{ route.params.nsp }}</td></tr>
+              <tr><td>{{ $t("rooms.sockets-count") }}</td><td>{{ room.sockets.length }}</td></tr>
+            </tbody>
+          </v-table>
+        </v-card>
+      </v-col>
+      <v-col cols="12" md="8">
+        <v-card>
+          <v-card-title>{{ $t("sockets.title") }}</v-card-title>
+          <v-list>
+            <v-list-item
+              v-for="socket in room.sockets"
+              :key="socket.id"
+              :to="{ name: 'socket', params: { nsp: route.params.nsp, id: socket.id } }"
+            >
+              <v-list-item-title>{{ socket.id }}</v-list-item-title>
+            </v-list-item>
+          </v-list>
+        </v-card>
+      </v-col>
+    </v-row>
   </div>
 </template>
 
-<script>
-import { mapGetters } from "vuex";
-import RoomSockets from "../components/Room/RoomSockets";
-import RoomDetails from "../components/Room/RoomDetails";
+<script setup>
+import { computed } from "vue";
+import { useRoute } from "vue-router";
+import RoomStatus from "../components/Room/RoomStatus.vue";
+import { useMainStore } from "../stores/main";
 
-export default {
-  name: "Sockets",
+const route = useRoute();
+const mainStore = useMainStore();
 
-  components: { RoomDetails, RoomSockets },
-
-  data() {
-    return {
-      room: null,
-    };
-  },
-
-  computed: {
-    breadcrumbItems() {
-      return [
-        {
-          text: this.$t("rooms.title"),
-          to: { name: "rooms" },
-        },
-        {
-          text: this.$t("rooms.details"),
-          disabled: true,
-        },
-      ];
-    },
-    ...mapGetters("main", ["findRoomByName"]),
-  },
-
-  mounted() {
-    this.room = this.findRoomByName(
-      this.$route.params.nsp,
-      this.$route.params.name
-    );
-  },
-};
+const room = computed(() => mainStore.findRoomByName(route.params.nsp, route.params.name));
+const breadcrumbs = computed(() => [
+  { title: "Rooms", to: { name: "rooms" } },
+  { title: "Details" },
+]);
 </script>

@@ -1,17 +1,17 @@
-FROM node:14-alpine as node-builder
+FROM node:24-alpine as node-builder
 
 WORKDIR /app
 
 # Install app dependencies
 COPY package.json .
-RUN npm install
+RUN pnpm install
 
 # Bundle app source
 COPY . .
 
-RUN npm run build
+RUN pnpm run build
 
-FROM nginx:1.20.1
+FROM nginx:latest
 
 WORKDIR /usr/share/nginx/html
 

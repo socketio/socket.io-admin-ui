@@ -1,106 +1,83 @@
 <template>
-  <v-app-bar app clipped-left :extension-height="extensionHeight">
+  <v-app-bar
+    :height="60"
+    flat
+    class="border-b border-[rgba(var(--v-border-color),var(--v-border-opacity))]"
+  >
+    <!-- Mobile nav toggle -->
     <v-app-bar-nav-icon
-      class="d-lg-none"
-      @click.stop="toggleNavigationDrawer"
+      class="lg:hidden"
+      @click="configStore.toggleNavigationDrawer()"
     />
 
-    <v-img :src="logoSrc" alt="logo" max-height="40" max-width="40" />
-    <v-toolbar-title class="ml-3">Socket.IO Admin UI</v-toolbar-title>
-    <v-btn small class="pa-0 ml-2 elevation-0" :href="linkToReleaseNotes">{{
-      version
-    }}</v-btn>
+    <!-- Logo + Title -->
+    <div class="flex items-center gap-3 pl-2">
+      <div class="flex size-8 items-center justify-center rounded-lg bg-primary/10">
+        <v-img :src="logoSrc" alt="logo" :height="22" :width="22" />
+      </div>
+      <div class="hidden items-baseline gap-2 sm:flex">
+        <span class="text-sm font-semibold tracking-tight">
+          Socket.IO
+        </span>
+        <span class="text-xs font-medium text-[rgba(var(--v-theme-on-surface),0.45)]">
+          Admin UI
+        </span>
+      </div>
+      <a
+      :href="releaseNotesLink"
+      target="_blank"
+      rel="noopener"
+      class="inline-flex items-center rounded-full border border-[rgba(var(--v-border-color),var(--v-border-opacity))] px-2.5 py-0.5 text-[10px] font-semibold text-[rgba(var(--v-theme-on-surface),0.5)] transition-colors hover:border-[rgba(var(--v-theme-primary),0.3)] hover:text-[rgb(var(--v-theme-primary))]"
+    >
+      v{{ version }}
+    </a>
+    </div>
 
     <v-spacer />
 
-    <div class="d-none d-lg-flex">
-      <div>
-        <div>
-          {{ $t("connection.serverUrl") }}{{ $t("separator")
-          }}<code v-if="serverUrl">{{ serverUrl }}</code>
-        </div>
-        <div>
-          {{ $t("status") }}{{ $t("separator")
-          }}<ConnectionStatus :connected="connected" />
+    <!-- Connection info — desktop only -->
+    <div class="hidden items-center gap-5 lg:flex pr-2">
+      <div class="flex items-center gap-3">
+        <div class="flex flex-col items-end gap-0.5">
+          <div class="flex items-center gap-1.5">
+            <span class="text-[11px] font-medium text-[rgba(var(--v-theme-on-surface),0.45)]">
+              {{ connectionStore.serverUrl || "—" }}
+            </span>
+          </div>
+          <ConnectionStatus :connected="connectionStore.connected" />
         </div>
       </div>
 
-      <v-btn outlined @click="onUpdate" class="ml-3 align-self-center">{{
-        $t("update")
-      }}</v-btn>
+      <div class="h-6 w-px bg-[rgba(var(--v-border-color),var(--v-border-opacity))]" />
+
+      <v-btn
+        variant="tonal"
+        size="small"
+        color="primary"
+        class="text-xs! font-semibold! tracking-normal!"
+        @click="$emit('update')"
+      >
+        <v-icon icon="mdi-refresh" size="14" class="mr-1" />
+        {{ $t("update") }}
+      </v-btn>
     </div>
-
-    <template v-slot:extension>
-      <div class="d-flex flex-column d-lg-none">
-        <div class="mt-3">
-          {{ $t("connection.serverUrl") }}{{ $t("separator")
-          }}<code v-if="serverUrl">{{ serverUrl }}</code>
-        </div>
-        <div class="mt-3 mb-3">
-          {{ $t("status") }}{{ $t("separator")
-          }}<ConnectionStatus :connected="connected" />
-          <v-btn small outlined @click="onUpdate" class="ml-3">{{
-            $t("update")
-          }}</v-btn>
-        </div>
-      </div>
-    </template>
   </v-app-bar>
 </template>
 
-<script>
-import { mapState } from "vuex";
-import ConnectionStatus from "./ConnectionStatus";
+<script setup>
+import { computed } from "vue";
+import ConnectionStatus from "./ConnectionStatus.vue";
+import { useConfigStore } from "../stores/config";
+import { useConnectionStore } from "../stores/connection";
+import darkLogo from "../assets/logo-dark.svg";
+import lightLogo from "../assets/logo-light.svg";
 
-const version = process.env.VERSION;
+defineEmits(["update"]);
 
-export default {
-  name: "AppBar",
+const configStore = useConfigStore();
+const connectionStore = useConnectionStore();
 
-  components: { ConnectionStatus },
-
-  data() {
-    return {
-      version,
-    };
-  },
-
-  computed: {
-    ...mapState({
-      logoSrc: (state) =>
-        state.config.darkTheme
-          ? require("../assets/logo-dark.svg")
-          : require("../assets/logo-light.svg"),
-      serverUrl: (state) => state.connection.serverUrl,
-      connected: (state) => state.connection.connected,
-    }),
-    linkToReleaseNotes() {
-      return (
-        "https://github.com/socketio/socket.io-admin-ui/releases/tag/" + version
-      );
-    },
-
-    extensionHeight() {
-      switch (this.$vuetify.breakpoint.name) {
-        case "xs":
-        case "sm":
-        case "md":
-          return 96;
-        case "lg":
-        case "xl":
-        default:
-          return 0;
-      }
-    },
-  },
-
-  methods: {
-    onUpdate() {
-      this.$emit("update");
-    },
-    toggleNavigationDrawer() {
-      this.$store.commit("config/toggleNavigationDrawer");
-    },
-  },
-};
+const version = __APP_VERSION__;
+const releaseNotesLink = `https://github.com/socketio/socket.io-admin-ui/releases/tag/${version}`;
+const logoSrc = computed(() => (configStore.darkTheme ? darkLogo : lightLogo));
 </script>

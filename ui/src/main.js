@@ -1,26 +1,33 @@
-import Vue from "vue";
+import { createApp } from "vue";
+import { createPinia } from "pinia";
 import App from "./App.vue";
 import router from "./router";
 import i18n from "./i18n";
-import store from "./store";
 import vuetify from "./plugins/vuetify";
+import { useConfigStore } from "./stores/config";
+import { useConnectionStore } from "./stores/connection";
+import { useServersStore } from "./stores/servers";
 import "./plugins/chartjs";
+import "./styles/tailwind.css"; 
 
-Vue.config.productionTip = false;
+const app = createApp(App);
+const pinia = createPinia();
 
-store.commit("config/init");
-store.commit("connection/init");
+app.use(pinia);
+app.use(router);
+app.use(i18n);
+app.use(vuetify);
 
-i18n.locale = store.state.config.lang;
+const configStore = useConfigStore(pinia);
+const connectionStore = useConnectionStore(pinia);
+const serversStore = useServersStore(pinia);
+
+configStore.init();
+connectionStore.init();
+i18n.global.locale.value = configStore.lang;
 
 setInterval(() => {
-  store.commit("servers/updateState");
+  serversStore.updateState();
 }, 1000);
 
-new Vue({
-  router,
-  i18n,
-  store,
-  vuetify,
-  render: (h) => h(App),
-}).$mount("#app");
+app.mount("#app");

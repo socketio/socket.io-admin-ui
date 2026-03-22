@@ -1,37 +1,29 @@
 <template>
   <v-select
-    :value="selectedNamespace"
+    :model-value="mainStore.selectedNamespace"
     :items="namespaces"
-    @change="selectNamespace"
-    item-text="name"
-    item-value="name"
-    :label="$t('select-namespace')"
-    persistent-hint
+    item-title="name"
     return-object
+    :label="$t('select-namespace')"
+    variant="outlined"
+    density="compact"
+    hide-details
     class="selector"
+    @update:model-value="mainStore.selectNamespace"
   />
 </template>
 
-<script>
-import { mapMutations, mapState } from "vuex";
+<script setup>
+import { computed } from "vue";
 import { sortBy } from "lodash-es";
+import { useMainStore } from "../stores/main";
 
-export default {
-  name: "NamespaceSelector",
-  computed: {
-    ...mapState({
-      selectedNamespace: (state) => state.main.selectedNamespace,
-      namespaces: (state) => sortBy(state.main.namespaces, "name"),
-    }),
-  },
-  methods: {
-    ...mapMutations("main", ["selectNamespace"]),
-  },
-};
+const mainStore = useMainStore();
+const namespaces = computed(() => sortBy(mainStore.namespaces, "name"));
 </script>
 
 <style scoped>
 .selector {
-  max-width: 200px;
+  max-width: 240px;
 }
 </style>

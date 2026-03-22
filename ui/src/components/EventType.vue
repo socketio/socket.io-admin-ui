@@ -1,37 +1,28 @@
 <template>
-  <v-chip :color="color" outlined>
-    {{ $t("events.type." + type) }}
+  <v-chip :color="color" variant="tonal" size="small">
+    {{ $t(`events.type.${type}`) }}
   </v-chip>
 </template>
 
-<script>
-import colors from "vuetify/lib/util/colors";
+<script setup>
+import { computed } from "vue";
 
-export default {
-  name: "EventType",
-
-  props: {
+const props = defineProps({
+  type: {
     type: String,
+    default: "",
   },
+});
 
-  computed: {
-    color() {
-      switch (this.type) {
-        case "connection":
-          return colors.green.base;
-        case "room_joined":
-          return colors.teal.base;
-        case "room_left":
-          return colors.amber.base;
-        case "disconnection":
-          return colors.red.base;
-        case "event_received":
-          return colors.blue.base;
-        case "event_sent":
-          return colors.orange.base;
-      }
-      return colors.gray.base;
-    },
-  },
-};
+const color = computed(() => {
+  const palette = {
+    connection: "success",
+    room_joined: "teal",
+    room_left: "warning",
+    disconnection: "error",
+    event_received: "info",
+    event_sent: "orange",
+  };
+  return palette[props.type] || "default";
+});
 </script>

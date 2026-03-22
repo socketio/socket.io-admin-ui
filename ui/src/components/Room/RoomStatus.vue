@@ -1,21 +1,11 @@
 <template>
-  <Status
-    :value="active"
-    :ok-label="$t('rooms.active')"
-    :ko-label="$t('rooms.deleted')"
-  />
+  <Status :value="active" :ok-label="$t('rooms.active')" :ko-label="$t('rooms.deleted')" />
 </template>
 
-<script>
-import Status from "../Status";
+<script setup>
+import Status from "../Status.vue";
 
-export default {
-  name: "RoomStatus",
-
-  components: { Status },
-
-  props: {
-    active: Boolean,
-  },
-};
+defineProps({
+  active: Boolean,
+});
 </script>

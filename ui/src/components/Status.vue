@@ -1,28 +1,19 @@
 <template>
-  <v-chip small :color="color" outlined class="text-uppercase">{{
-    label
-  }}</v-chip>
+  <v-chip :color="value ? 'success' : 'error'" size="small" variant="tonal" class="text-uppercase">
+    {{ value ? okLabel : koLabel }}
+  </v-chip>
 </template>
 
-<script>
-import colors from "vuetify/lib/util/colors";
-
-export default {
-  name: "Status",
-
-  props: {
-    value: Boolean,
-    koLabel: String,
-    okLabel: String,
+<script setup>
+defineProps({
+  value: Boolean,
+  koLabel: {
+    type: String,
+    default: "",
   },
-
-  computed: {
-    label() {
-      return this.value ? this.okLabel : this.koLabel;
-    },
-    color() {
-      return this.value ? colors.green.base : colors.red.base;
-    },
+  okLabel: {
+    type: String,
+    default: "",
   },
-};
+});
 </script>
