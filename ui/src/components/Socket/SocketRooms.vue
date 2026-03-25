@@ -1,22 +1,101 @@
+<script setup>
+import { ref, computed } from "vue";
+import { useStore } from "vuex";
+import { useRouter } from "vue-router";
+import { useI18n } from "vue-i18n";
+import SocketHolder from "../../SocketHolder";
+import { differenceBy } from "lodash-es";
+
+const props = defineProps({
+  socket: Object,
+});
+
+const store = useStore();
+const router = useRouter();
+const { t } = useI18n();
+
+const newRoom = ref("");
+
+const headers = computed(() => [
+  {
+    title: t("id"),
+    key: "name",
+    align: "start",
+  },
+  {
+    key: "actions",
+    align: "end",
+    sortable: false,
+  },
+]);
+
+const roomsAsObjects = computed(() =>
+  props.socket.rooms
+    .slice(0)
+    .sort()
+    .map((room) => ({
+      name: room,
+    })),
+);
+
+const availableRooms = computed(() =>
+  differenceBy(
+    store.getters["main/findRoomsByNamespace"](props.socket.nsp),
+    roomsAsObjects.value,
+    "name",
+  ),
+);
+
+const isReadonly = computed(() => store.state.config.readonly);
+const isSocketLeaveSupported = computed(() =>
+  store.state.config.supportedFeatures.includes("LEAVE"),
+);
+
+const onSubmit = () => {
+  SocketHolder.socket.emit(
+    "join",
+    props.socket.nsp,
+    newRoom.value,
+    props.socket.id,
+  );
+  newRoom.value = "";
+};
+
+const leave = (room) => {
+  SocketHolder.socket.emit(
+    "leave",
+    props.socket.nsp,
+    room.name,
+    props.socket.id,
+  );
+};
+
+const displayDetails = (room) => {
+  router.push({
+    name: "room",
+    params: { nsp: props.socket.nsp, name: room.name },
+  });
+};
+</script>
+
 <template>
   <v-card class="fill-height">
     <v-card-title>{{ $t("rooms.title") }}</v-card-title>
     <v-data-table
       :headers="headers"
       :items="roomsAsObjects"
-      dense
+      density="compact"
       class="row-pointer"
-      @click:row="displayDetails"
+      @click:row="(event, { item }) => displayDetails(item)"
     >
       <template v-slot:item.actions="{ item }">
-        <v-tooltip bottom v-if="isSocketLeaveSupported">
-          <template v-slot:activator="{ on, attrs }">
+        <v-tooltip location="bottom" v-if="isSocketLeaveSupported">
+          <template v-slot:activator="{ props }">
             <v-btn
-              v-bind="attrs"
-              v-on="on"
-              @click="leave(item)"
+              v-bind="props"
+              @click.stop="leave(item)"
               :disabled="isReadonly"
-              small
+              size="small"
               class="ml-3"
             >
               <v-icon>mdi-tag-off-outline</v-icon>
@@ -28,25 +107,25 @@
     </v-data-table>
 
     <v-card-text>
-      <form @submit.prevent="onSubmit">
+      <form @submit.prevent="onSubmit" class="d-flex align-center">
         <v-combobox
-          :search-input.sync="newRoom"
+          v-model:search="newRoom"
           :label="$t('sockets.join-a-room')"
           :items="availableRooms"
           item-value="name"
-          item-text="name"
+          item-title="name"
           class="select-room d-inline-block mr-3"
           :disabled="isReadonly"
           :return-object="false"
+          hide-details
         />
 
-        <v-tooltip bottom>
-          <template v-slot:activator="{ on, attrs }">
+        <v-tooltip location="bottom">
+          <template v-slot:activator="{ props }">
             <v-btn
-              v-bind="attrs"
-              v-on="on"
+              v-bind="props"
               type="submit"
-              small
+              size="small"
               :disabled="isReadonly"
             >
               <v-icon>mdi-tag-plus-outline</v-icon>
@@ -59,109 +138,8 @@
   </v-card>
 </template>
 
-<script>
-import { mapGetters, mapState } from "vuex";
-import SocketHolder from "../../SocketHolder";
-import { differenceBy } from "lodash-es";
-
-export default {
-  name: "SocketRooms",
-
-  props: {
-    socket: Object,
-  },
-
-  data() {
-    return {
-      newRoom: "",
-    };
-  },
-
-  computed: {
-    headers() {
-      return [
-        {
-          text: this.$t("id"),
-          value: "name",
-          align: "start",
-        },
-        {
-          value: "actions",
-          align: "end",
-          sortable: false,
-        },
-      ];
-    },
-    roomsAsObjects() {
-      return this.socket.rooms
-        .slice(0)
-        .sort()
-        .map((room) => ({
-          name: room,
-        }));
-    },
-    availableRooms() {
-      return differenceBy(
-        this.findRoomsByNamespace(this.socket.nsp),
-        this.roomsAsObjects,
-        "name"
-      );
-    },
-    ...mapState({
-      selectedNamespace: (state) => state.main.selectedNamespace,
-      isReadonly: (state) => state.config.readonly,
-      isSocketLeaveSupported: (state) =>
-        state.config.supportedFeatures.includes("LEAVE"),
-      isSocketDisconnectSupported: (state) =>
-        state.config.supportedFeatures.includes("DISCONNECT"),
-    }),
-    ...mapGetters("main", ["findRoomsByNamespace"]),
-  },
-
-  methods: {
-    emit() {
-      // TODO
-    },
-    onSubmit() {
-      SocketHolder.socket.emit(
-        "join",
-        this.socket.nsp,
-        this.newRoom,
-        this.socket.id
-      );
-      this.newRoom = "";
-    },
-    leave(room) {
-      SocketHolder.socket.emit(
-        "leave",
-        this.socket.nsp,
-        room.name,
-        this.socket.id
-      );
-    },
-    disconnect() {
-      SocketHolder.socket.emit(
-        "_disconnect",
-        this.socket.nsp,
-        false,
-        this.socket.id
-      );
-    },
-    displayDetails(room) {
-      this.$router.push({
-        name: "room",
-        params: { nsp: this.socket.nsp, name: room.name },
-      });
-    },
-  },
-};
-</script>
-
 <style scoped>
 .select-room {
   max-width: 200px;
-}
-.row-pointer >>> tbody > tr:hover {
-  cursor: pointer;
 }
 </style>

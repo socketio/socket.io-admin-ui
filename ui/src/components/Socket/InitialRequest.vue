@@ -1,3 +1,11 @@
+<script setup>
+import KeyValueTable from "../KeyValueTable.vue";
+
+defineProps({
+  socket: Object,
+});
+</script>
+
 <template>
   <v-card class="fill-height">
     <v-card-title>{{ $t("sockets.initial-request") }}</v-card-title>
@@ -15,17 +23,3 @@
     <KeyValueTable :object="socket.handshake.query" />
   </v-card>
 </template>
-
-<script>
-import KeyValueTable from "../KeyValueTable";
-
-export default {
-  name: "InitialRequest",
-
-  components: { KeyValueTable },
-
-  props: {
-    socket: Object,
-  },
-};
-</script>

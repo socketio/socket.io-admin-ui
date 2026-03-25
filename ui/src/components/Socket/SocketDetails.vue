@@ -1,3 +1,52 @@
+<script setup>
+import { computed } from "vue";
+import { useStore } from "vuex";
+import Transport from "../Transport.vue";
+import ConnectionStatus from "../ConnectionStatus.vue";
+import SocketHolder from "../../SocketHolder";
+
+const props = defineProps({
+  socket: Object,
+  client: Object,
+});
+
+const store = useStore();
+
+const toClient = computed(() => ({
+  name: "client",
+  params: {
+    id: props.client.id,
+  },
+}));
+
+const creationDate = computed(() =>
+  new Date(props.socket.handshake.issued).toISOString(),
+);
+
+const isReadonly = computed(() => store.state.config.readonly);
+const isSocketDisconnectSupported = computed(() =>
+  store.state.config.supportedFeatures.includes("DISCONNECT"),
+);
+
+const disconnectClient = () => {
+  SocketHolder.socket.emit(
+    "_disconnect",
+    props.socket.nsp,
+    true,
+    props.socket.id,
+  );
+};
+
+const disconnectSocket = () => {
+  SocketHolder.socket.emit(
+    "_disconnect",
+    props.socket.nsp,
+    false,
+    props.socket.id,
+  );
+};
+</script>
+
 <template>
   <v-card class="fill-height">
     <v-card-title>{{ $t("details") }}</v-card-title>
@@ -6,8 +55,8 @@
       ><h4>{{ $t("sockets.client") }}</h4></v-card-text
     >
 
-    <v-simple-table dense>
-      <template>
+    <v-table density="compact">
+      <template v-slot:default>
         <tbody>
           <tr>
             <td class="key-column">{{ $t("id") }}</td>
@@ -29,16 +78,15 @@
             </td>
             <td align="right">
               <v-tooltip
-                bottom
+                location="bottom"
                 v-if="isSocketDisconnectSupported && client.connected"
               >
-                <template v-slot:activator="{ on, attrs }">
+                <template v-slot:activator="{ props }">
                   <v-btn
-                    v-bind="attrs"
-                    v-on="on"
+                    v-bind="props"
                     @click="disconnectClient()"
                     :disabled="isReadonly"
-                    small
+                    size="small"
                   >
                     <v-icon>mdi-logout</v-icon>
                   </v-btn>
@@ -59,13 +107,13 @@
           </tr>
         </tbody>
       </template>
-    </v-simple-table>
+    </v-table>
 
     <v-card-text
       ><h4>{{ $t("sockets.socket") }}</h4></v-card-text
     >
 
-    <v-simple-table dense>
+    <v-table density="compact">
       <template v-slot:default>
         <tbody>
           <tr>
@@ -97,16 +145,15 @@
             </td>
             <td align="right">
               <v-tooltip
-                bottom
+                location="bottom"
                 v-if="isSocketDisconnectSupported && socket.connected"
               >
-                <template v-slot:activator="{ on, attrs }">
+                <template v-slot:activator="{ props }">
                   <v-btn
-                    v-bind="attrs"
-                    v-on="on"
+                    v-bind="props"
                     @click="disconnectSocket()"
                     :disabled="isReadonly"
-                    small
+                    size="small"
                     class="ml-3"
                   >
                     <v-icon>mdi-logout</v-icon>
@@ -124,73 +171,9 @@
           </tr>
         </tbody>
       </template>
-    </v-simple-table>
+    </v-table>
   </v-card>
 </template>
-
-<script>
-import Transport from "../Transport";
-import ConnectionStatus from "../ConnectionStatus";
-import { mapState } from "vuex";
-import SocketHolder from "../../SocketHolder";
-
-export default {
-  name: "SocketDetails",
-
-  components: { ConnectionStatus, Transport },
-
-  props: {
-    socket: Object,
-    client: Object,
-  },
-
-  computed: {
-    toClient() {
-      return {
-        name: "client",
-        params: {
-          id: this.client.id,
-        },
-      };
-    },
-    creationDate() {
-      return new Date(this.socket.handshake.issued).toISOString();
-    },
-    ...mapState({
-      isReadonly: (state) => state.config.readonly,
-      isSocketDisconnectSupported: (state) =>
-        state.config.supportedFeatures.includes("DISCONNECT"),
-    }),
-  },
-
-  methods: {
-    navigateToClient() {
-      this.$router.push({
-        name: "client",
-        params: {
-          id: this.client.id,
-        },
-      });
-    },
-    disconnectClient() {
-      SocketHolder.socket.emit(
-        "_disconnect",
-        this.socket.nsp,
-        true,
-        this.socket.id
-      );
-    },
-    disconnectSocket() {
-      SocketHolder.socket.emit(
-        "_disconnect",
-        this.socket.nsp,
-        false,
-        this.socket.id
-      );
-    },
-  },
-};
-</script>
 
 <style scoped>
 .key-column {

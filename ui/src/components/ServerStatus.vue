@@ -1,3 +1,11 @@
+<script setup>
+import Status from "./Status.vue";
+
+defineProps({
+  healthy: Boolean,
+});
+</script>
+
 <template>
   <Status
     :value="healthy"
@@ -5,17 +13,3 @@
     :ko-label="$t('servers.unhealthy')"
   />
 </template>
-
-<script>
-import Status from "./Status";
-
-export default {
-  name: "ServerStatus",
-
-  components: { Status },
-
-  props: {
-    healthy: Boolean,
-  },
-};
-</script>

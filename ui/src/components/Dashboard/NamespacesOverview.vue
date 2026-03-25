@@ -1,16 +1,43 @@
+<script setup>
+import { computed } from "vue";
+import { useStore } from "vuex";
+import { sortBy } from "lodash-es";
+
+const store = useStore();
+
+const hasAggregatedValues = computed(
+  () => store.getters["config/hasAggregatedValues"],
+);
+const developmentMode = computed(() => store.getters["config/developmentMode"]);
+const liteNamespaces = computed(() => store.getters["servers/namespaces"]);
+
+const plainNamespaces = computed(() =>
+  sortBy(store.state.main.namespaces, "name").map(({ name, sockets }) => {
+    return {
+      name,
+      socketsCount: sockets.length,
+    };
+  }),
+);
+
+const namespaces = computed(() =>
+  hasAggregatedValues.value ? liteNamespaces.value : plainNamespaces.value,
+);
+</script>
+
 <template>
   <v-card class="fill-height">
-    <v-card-title class="text-center">
+    <v-card-title class="text-center d-flex align-center">
       {{ $t("namespaces") }}
 
       <v-spacer />
 
-      <v-btn v-if="developmentMode" :to="{ name: 'sockets' }" small>
+      <v-btn v-if="developmentMode" :to="{ name: 'sockets' }" size="small">
         <v-icon>mdi-dots-horizontal</v-icon>
       </v-btn>
     </v-card-title>
 
-    <v-simple-table>
+    <v-table>
       <template v-slot:default>
         <thead>
           <tr>
@@ -27,38 +54,8 @@
           </tr>
         </tbody>
       </template>
-    </v-simple-table>
+    </v-table>
   </v-card>
 </template>
-
-<script>
-import { mapState, mapGetters } from "vuex";
-import { sortBy } from "lodash-es";
-
-export default {
-  name: "NamespacesOverview",
-
-  computed: {
-    ...mapState({
-      plainNamespaces: (state) =>
-        sortBy(state.main.namespaces, "name").map(({ name, sockets }) => {
-          return {
-            name,
-            socketsCount: sockets.length,
-          };
-        }),
-    }),
-    ...mapGetters("config", ["hasAggregatedValues", "developmentMode"]),
-    ...mapGetters("servers", {
-      liteNamespaces: "namespaces",
-    }),
-    namespaces() {
-      return this.hasAggregatedValues
-        ? this.liteNamespaces
-        : this.plainNamespaces;
-    },
-  },
-};
-</script>
 
 <style scoped></style>

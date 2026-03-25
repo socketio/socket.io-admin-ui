@@ -1,3 +1,65 @@
+<script setup>
+import { computed } from "vue";
+import { useStore } from "vuex";
+import { useRouter, useRoute } from "vue-router";
+import { useI18n } from "vue-i18n";
+import Transport from "../Transport.vue";
+import SocketHolder from "../../SocketHolder";
+
+const props = defineProps({
+  room: Object,
+});
+
+const store = useStore();
+const router = useRouter();
+const route = useRoute();
+const { t } = useI18n();
+
+const headers = computed(() => [
+  {
+    title: t("id"),
+    key: "id",
+    align: "start",
+  },
+  {
+    title: t("sockets.address"),
+    key: "handshake.address",
+  },
+  {
+    title: t("sockets.transport"),
+    key: "transport",
+  },
+  {
+    key: "actions",
+    align: "end",
+    sortable: false,
+  },
+]);
+
+const isReadonly = computed(() => store.state.config.readonly);
+const isSocketLeaveSupported = computed(() =>
+  store.state.config.supportedFeatures.includes("LEAVE"),
+);
+const isSocketDisconnectSupported = computed(() =>
+  store.state.config.supportedFeatures.includes("DISCONNECT"),
+);
+
+const leave = (socket) => {
+  SocketHolder.socket.emit("leave", socket.nsp, props.room.name, socket.id);
+};
+
+const disconnect = (socket) => {
+  SocketHolder.socket.emit("_disconnect", socket.nsp, false, socket.id);
+};
+
+const displayDetails = (socket) => {
+  router.push({
+    name: "socket",
+    params: { nsp: route.params.nsp, id: socket.id },
+  });
+};
+</script>
+
 <template>
   <v-card v-if="room">
     <v-card-title>{{ $t("sockets.title") }}</v-card-title>
@@ -5,22 +67,24 @@
     <v-data-table
       :headers="headers"
       :items="room.sockets"
-      :footer-props="footerProps"
+      :items-per-page-options="[20, 100, -1]"
       class="row-pointer"
-      @click:row="displayDetails"
+      @click:row="(event, { item }) => displayDetails(item)"
     >
-      <template v-slot:item.transport="{ value }">
-        <Transport :transport="value" />
+      <template v-slot:item.transport="{ item }">
+        <Transport :transport="item.transport" />
       </template>
       <template v-slot:item.actions="{ item }">
-        <v-tooltip bottom v-if="isSocketLeaveSupported && !room.isPrivate">
-          <template v-slot:activator="{ on, attrs }">
+        <v-tooltip
+          location="bottom"
+          v-if="isSocketLeaveSupported && !room.isPrivate"
+        >
+          <template v-slot:activator="{ props }">
             <v-btn
-              v-bind="attrs"
-              v-on="on"
-              @click="leave(item)"
+              v-bind="props"
+              @click.stop="leave(item)"
               :disabled="isReadonly"
-              small
+              size="small"
               class="ml-3"
             >
               <v-icon>mdi-tag-off-outline</v-icon>
@@ -29,14 +93,13 @@
           <span>{{ $t("rooms.leave") }}</span>
         </v-tooltip>
 
-        <v-tooltip bottom v-if="isSocketDisconnectSupported">
-          <template v-slot:activator="{ on, attrs }">
+        <v-tooltip location="bottom" v-if="isSocketDisconnectSupported">
+          <template v-slot:activator="{ props }">
             <v-btn
-              v-bind="attrs"
-              v-on="on"
-              @click="disconnect(item)"
+              v-bind="props"
+              @click.stop="disconnect(item)"
               :disabled="isReadonly"
-              small
+              size="small"
               class="ml-3"
             >
               <v-icon>mdi-logout</v-icon>
@@ -49,92 +112,4 @@
   </v-card>
 </template>
 
-<script>
-import Transport from "../Transport";
-import { mapGetters, mapState } from "vuex";
-import SocketHolder from "../../SocketHolder";
-
-export default {
-  name: "RoomSockets",
-
-  components: { Transport },
-
-  props: {
-    room: Object,
-  },
-
-  data() {
-    return {
-      footerProps: {
-        "items-per-page-options": [20, 100, -1],
-      },
-    };
-  },
-
-  computed: {
-    breadcrumbItems() {
-      return [
-        {
-          text: this.$t("rooms.title"),
-          to: { name: "rooms" },
-        },
-        {
-          text: this.$t("rooms.details"),
-          disabled: true,
-        },
-      ];
-    },
-    headers() {
-      return [
-        {
-          text: this.$t("id"),
-          value: "id",
-          align: "start",
-        },
-        {
-          text: this.$t("sockets.address"),
-          value: "handshake.address",
-        },
-        {
-          text: this.$t("sockets.transport"),
-          value: "transport",
-        },
-        {
-          value: "actions",
-          align: "end",
-          sortable: false,
-        },
-      ];
-    },
-    ...mapGetters("main", ["findRoomByName"]),
-    ...mapState({
-      isReadonly: (state) => state.config.readonly,
-      isSocketLeaveSupported: (state) =>
-        state.config.supportedFeatures.includes("LEAVE"),
-      isSocketDisconnectSupported: (state) =>
-        state.config.supportedFeatures.includes("DISCONNECT"),
-    }),
-  },
-
-  methods: {
-    leave(socket) {
-      SocketHolder.socket.emit("leave", socket.nsp, this.room.name, socket.id);
-    },
-    disconnect(socket) {
-      SocketHolder.socket.emit("_disconnect", socket.nsp, false, socket.id);
-    },
-    displayDetails(socket) {
-      this.$router.push({
-        name: "socket",
-        params: { nsp: this.$route.params.nsp, id: socket.id },
-      });
-    },
-  },
-};
-</script>
-
-<style scoped>
-.row-pointer >>> tbody > tr:hover {
-  cursor: pointer;
-}
-</style>
+<style scoped></style>

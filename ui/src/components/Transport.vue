@@ -1,38 +1,34 @@
-<template>
-  <v-chip small :color="color" outlined>{{ label }}</v-chip>
-</template>
+<script setup>
+import { computed } from "vue";
+import colors from "vuetify/util/colors";
 
-<script>
-import colors from "vuetify/lib/util/colors";
+const props = defineProps({
+  transport: String,
+});
 
-export default {
-  name: "Transport",
+const label = computed(() => {
+  switch (props.transport) {
+    case "polling":
+      return "HTTP long-polling";
+    case "websocket":
+      return "WebSocket";
+    default:
+      return props.transport;
+  }
+});
 
-  props: {
-    transport: String,
-  },
-
-  computed: {
-    label() {
-      switch (this.transport) {
-        case "polling":
-          return "HTTP long-polling";
-        case "websocket":
-          return "WebSocket";
-        default:
-          return this.transport;
-      }
-    },
-    color() {
-      switch (this.transport) {
-        case "polling":
-          return colors.orange.base;
-        case "websocket":
-          return colors.green.base;
-        default:
-          return colors.grey.base;
-      }
-    },
-  },
-};
+const color = computed(() => {
+  switch (props.transport) {
+    case "polling":
+      return colors.orange.base;
+    case "websocket":
+      return colors.green.base;
+    default:
+      return colors.grey.base;
+  }
+});
 </script>
+
+<template>
+  <v-chip size="small" :color="color" variant="outlined">{{ label }}</v-chip>
+</template>

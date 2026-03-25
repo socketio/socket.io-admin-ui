@@ -1,3 +1,41 @@
+<script setup>
+import { ref, computed, onMounted } from "vue";
+import { useStore } from "vuex";
+import { useRoute } from "vue-router";
+import { useI18n } from "vue-i18n";
+import SocketRooms from "../components/Socket/SocketRooms.vue";
+import SocketDetails from "../components/Socket/SocketDetails.vue";
+import InitialRequest from "../components/Socket/InitialRequest.vue";
+
+const store = useStore();
+const route = useRoute();
+const { t } = useI18n();
+
+const socket = ref(null);
+const client = ref(null);
+
+const breadcrumbItems = computed(() => [
+  {
+    title: t("sockets.title"),
+    to: { name: "sockets" },
+  },
+  {
+    title: t("sockets.details"),
+    disabled: true,
+  },
+]);
+
+onMounted(() => {
+  socket.value = store.getters["main/findSocketById"](
+    route.params.nsp,
+    route.params.id,
+  );
+  if (socket.value) {
+    client.value = store.getters["main/findClientById"](socket.value.clientId);
+  }
+});
+</script>
+
 <template>
   <div>
     <v-breadcrumbs :items="breadcrumbItems" />
@@ -19,51 +57,3 @@
     </v-container>
   </div>
 </template>
-
-<script>
-import { mapGetters } from "vuex";
-import SocketRooms from "../components/Socket/SocketRooms";
-import SocketDetails from "../components/Socket/SocketDetails";
-import InitialRequest from "../components/Socket/InitialRequest";
-
-export default {
-  name: "Socket",
-
-  components: { InitialRequest, SocketDetails, SocketRooms },
-
-  data() {
-    return {
-      socket: null,
-      client: null,
-    };
-  },
-
-  computed: {
-    breadcrumbItems() {
-      return [
-        {
-          text: this.$t("sockets.title"),
-          to: { name: "sockets" },
-        },
-        {
-          text: this.$t("sockets.details"),
-          disabled: true,
-        },
-      ];
-    },
-    ...mapGetters("main", ["findSocketById", "findClientById"]),
-  },
-
-  mounted() {
-    this.socket = this.findSocketById(
-      this.$route.params.nsp,
-      this.$route.params.id
-    );
-    if (this.socket) {
-      this.client = this.findClientById(this.socket.clientId);
-    }
-  },
-};
-</script>
-
-<style scoped></style>

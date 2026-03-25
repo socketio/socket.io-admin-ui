@@ -1,3 +1,11 @@
+<script setup>
+import Status from "../Status.vue";
+
+defineProps({
+  active: Boolean,
+});
+</script>
+
 <template>
   <Status
     :value="active"
@@ -5,17 +13,3 @@
     :ko-label="$t('rooms.deleted')"
   />
 </template>
-
-<script>
-import Status from "../Status";
-
-export default {
-  name: "RoomStatus",
-
-  components: { Status },
-
-  props: {
-    active: Boolean,
-  },
-};
-</script>

@@ -1,3 +1,59 @@
+<script setup>
+import { ref, computed } from "vue";
+import { useStore } from "vuex";
+import { useI18n } from "vue-i18n";
+import NamespaceSelector from "../components/NamespaceSelector.vue";
+import EventType from "@/components/EventType.vue";
+
+const store = useStore();
+const { t } = useI18n();
+
+const sortBy = ref([
+  { key: "timestamp", order: "desc" },
+  { key: "eventId", order: "desc" },
+]);
+
+const breadcrumbItems = computed(() => [
+  {
+    title: t("events.title"),
+    disabled: true,
+  },
+]);
+
+const headers = computed(() => [
+  {
+    title: t("timestamp"),
+    key: "timestamp",
+  },
+  {
+    title: t("sockets.socket"),
+    key: "id",
+    sortable: false,
+  },
+  {
+    title: t("type"),
+    key: "type",
+    sortable: false,
+  },
+  {
+    key: "args",
+    sortable: false,
+  },
+  { title: "", key: "data-table-expand" },
+]);
+
+const events = computed(() => store.getters["main/events"]);
+const selectedNamespace = computed(() => store.state.main.selectedNamespace);
+
+const socketDetailsRoute = (sid) => ({
+  name: "socket",
+  params: { nsp: selectedNamespace.value.name, id: sid },
+});
+
+const isExpandable = (item) =>
+  ["event_received", "event_sent"].includes(item.type);
+</script>
+
 <template>
   <div>
     <v-breadcrumbs :items="breadcrumbItems" />
@@ -10,141 +66,56 @@
       <v-data-table
         :headers="headers"
         :items="events"
-        :footer-props="footerProps"
-        item-key="eventId"
-        :sort-by="['timestamp', 'eventId']"
-        :sort-desc="[true, true]"
-        single-expand
+        :items-per-page-options="[-1]"
+        item-value="eventId"
+        v-model:sort-by="sortBy"
         show-expand
       >
-        <template #item.type="{ value }">
-          <EventType :type="value" />
+        <template #item.type="{ item }">
+          <EventType :type="item.type" />
         </template>
 
-        <template #item.id="{ value }">
-          <router-link class="link" :to="socketDetailsRoute(value)">{{
-            value
+        <template #item.id="{ item }">
+          <router-link class="link" :to="socketDetailsRoute(item.id)">{{
+            item.id
           }}</router-link>
         </template>
 
-        <template #item.args="{ item, value }">
+        <template #item.args="{ item }">
           <span v-if="isExpandable(item)">
             {{ $t("events.eventName") }}{{ $t("separator")
             }}<code>{{ item.eventName }}</code>
           </span>
           <span v-else-if="item.type === 'disconnection'">
             {{ $t("events.reason") }}{{ $t("separator")
-            }}<code>{{ value }}</code>
+            }}<code>{{ item.args }}</code>
           </span>
           <span
             v-else-if="item.type === 'room_joined' || item.type === 'room_left'"
           >
-            {{ $t("events.room") }}{{ $t("separator") }}<code>{{ value }}</code>
+            {{ $t("events.room") }}{{ $t("separator")
+            }}<code>{{ item.args }}</code>
           </span>
           <span v-else>
-            {{ value }}
+            {{ item.args }}
           </span>
         </template>
 
-        <template #item.data-table-expand="{ item, isExpanded, expand }">
-          <v-btn
-            @click="expand(true)"
-            v-if="isExpandable(item) && !isExpanded"
-            icon
-          >
-            <v-icon>mdi-chevron-down</v-icon>
-          </v-btn>
-          <v-btn
-            @click="expand(false)"
-            v-if="isExpandable(item) && isExpanded"
-            icon
-          >
-            <v-icon>mdi-chevron-up</v-icon>
-          </v-btn>
-        </template>
-
-        <template #expanded-item="{ headers, item }">
-          <td :colspan="headers.length">
-            <div class="ma-3">
-              {{ $t("events.eventArgs") }}{{ $t("separator") }}
-              <pre><code>{{ item.args }}</code></pre>
-            </div>
-          </td>
+        <template #expanded-row="{ columns, item }">
+          <tr>
+            <td :colspan="columns.length">
+              <div class="ma-3">
+                {{ $t("events.eventArgs") }}{{ $t("separator") }}
+                <pre><code>{{ item.args }}</code></pre>
+              </div>
+            </td>
+          </tr>
         </template>
       </v-data-table>
     </v-card>
   </div>
 </template>
 
-<script>
-import { mapGetters, mapState } from "vuex";
-import NamespaceSelector from "../components/NamespaceSelector";
-import EventType from "@/components/EventType";
-
-export default {
-  name: "Events",
-
-  components: { EventType, NamespaceSelector },
-
-  data() {
-    return {
-      footerProps: {
-        "items-per-page-options": [-1],
-      },
-    };
-  },
-
-  computed: {
-    breadcrumbItems() {
-      return [
-        {
-          text: this.$t("events.title"),
-          disabled: true,
-        },
-      ];
-    },
-    headers() {
-      return [
-        {
-          text: this.$t("timestamp"),
-          value: "timestamp",
-        },
-        {
-          text: this.$t("sockets.socket"),
-          value: "id",
-          sortable: false,
-        },
-        {
-          text: this.$t("type"),
-          value: "type",
-          sortable: false,
-        },
-        {
-          value: "args",
-          sortable: false,
-        },
-        { text: "", value: "data-table-expand" },
-      ];
-    },
-    ...mapGetters("main", ["events"]),
-    ...mapState({
-      selectedNamespace: (state) => state.main.selectedNamespace,
-    }),
-  },
-
-  methods: {
-    socketDetailsRoute(sid) {
-      return {
-        name: "socket",
-        params: { nsp: this.selectedNamespace.name, id: sid },
-      };
-    },
-    isExpandable(item) {
-      return ["event_received", "event_sent"].includes(item.type);
-    },
-  },
-};
-</script>
 <style scoped>
 .link {
   color: inherit;

@@ -1,9 +1,24 @@
+<script setup>
+import { computed } from "vue";
+import { useStore } from "vuex";
+import { sortBy } from "lodash-es";
+
+const store = useStore();
+
+const selectedNamespace = computed(() => store.state.main.selectedNamespace);
+const namespaces = computed(() => sortBy(store.state.main.namespaces, "name"));
+
+const selectNamespace = (namespace) => {
+  store.commit("main/selectNamespace", namespace);
+};
+</script>
+
 <template>
   <v-select
-    :value="selectedNamespace"
+    :model-value="selectedNamespace"
     :items="namespaces"
-    @change="selectNamespace"
-    item-text="name"
+    @update:model-value="selectNamespace"
+    item-title="name"
     item-value="name"
     :label="$t('select-namespace')"
     persistent-hint
@@ -11,24 +26,6 @@
     class="selector"
   />
 </template>
-
-<script>
-import { mapMutations, mapState } from "vuex";
-import { sortBy } from "lodash-es";
-
-export default {
-  name: "NamespaceSelector",
-  computed: {
-    ...mapState({
-      selectedNamespace: (state) => state.main.selectedNamespace,
-      namespaces: (state) => sortBy(state.main.namespaces, "name"),
-    }),
-  },
-  methods: {
-    ...mapMutations("main", ["selectNamespace"]),
-  },
-};
-</script>
 
 <style scoped>
 .selector {

@@ -16,7 +16,7 @@ ChartJS.register(
   ArcElement,
   BarElement,
   TimeScale,
-  LinearScale
+  LinearScale,
 );
 
 import "chartjs-adapter-date-fns";

@@ -1,3 +1,51 @@
+<script setup>
+import { computed } from "vue";
+import { useStore } from "vuex";
+import { useDisplay } from "vuetify";
+import ConnectionStatus from "./ConnectionStatus.vue";
+
+const store = useStore();
+const display = useDisplay();
+
+const emit = defineEmits(["update"]);
+
+const version = __APP_VERSION__;
+
+const logoSrc = computed(() =>
+  store.state.config.darkTheme
+    ? new URL("../assets/logo-dark.svg", import.meta.url).href
+    : new URL("../assets/logo-light.svg", import.meta.url).href,
+);
+const serverUrl = computed(() => store.state.connection.serverUrl);
+const connected = computed(() => store.state.connection.connected);
+
+const linkToReleaseNotes = computed(
+  () =>
+    "https://github.com/socketio/socket.io-admin-ui/releases/tag/" + version,
+);
+
+const extensionHeight = computed(() => {
+  switch (display.name.value) {
+    case "xs":
+    case "sm":
+    case "md":
+      return 96;
+    case "lg":
+    case "xl":
+    default:
+      return 0;
+  }
+});
+
+const onUpdate = () => {
+  emit("update");
+};
+
+const toggleNavigationDrawer = () => {
+  store.commit("config/toggleNavigationDrawer");
+};
+</script>
+
 <template>
   <v-app-bar app clipped-left :extension-height="extensionHeight">
     <v-app-bar-nav-icon
@@ -47,60 +95,3 @@
     </template>
   </v-app-bar>
 </template>
-
-<script>
-import { mapState } from "vuex";
-import ConnectionStatus from "./ConnectionStatus";
-
-const version = process.env.VERSION;
-
-export default {
-  name: "AppBar",
-
-  components: { ConnectionStatus },
-
-  data() {
-    return {
-      version,
-    };
-  },
-
-  computed: {
-    ...mapState({
-      logoSrc: (state) =>
-        state.config.darkTheme
-          ? require("../assets/logo-dark.svg")
-          : require("../assets/logo-light.svg"),
-      serverUrl: (state) => state.connection.serverUrl,
-      connected: (state) => state.connection.connected,
-    }),
-    linkToReleaseNotes() {
-      return (
-        "https://github.com/socketio/socket.io-admin-ui/releases/tag/" + version
-      );
-    },
-
-    extensionHeight() {
-      switch (this.$vuetify.breakpoint.name) {
-        case "xs":
-        case "sm":
-        case "md":
-          return 96;
-        case "lg":
-        case "xl":
-        default:
-          return 0;
-      }
-    },
-  },
-
-  methods: {
-    onUpdate() {
-      this.$emit("update");
-    },
-    toggleNavigationDrawer() {
-      this.$store.commit("config/toggleNavigationDrawer");
-    },
-  },
-};
-</script>

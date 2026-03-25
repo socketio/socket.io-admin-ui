@@ -1,3 +1,11 @@
+<script setup>
+import Status from "./Status.vue";
+
+defineProps({
+  connected: Boolean,
+});
+</script>
+
 <template>
   <Status
     :value="connected"
@@ -5,17 +13,3 @@
     :ko-label="$t('disconnected')"
   />
 </template>
-
-<script>
-import Status from "./Status";
-
-export default {
-  name: "ConnectionStatus",
-
-  components: { Status },
-
-  props: {
-    connected: Boolean,
-  },
-};
-</script>

@@ -1,3 +1,11 @@
+<script setup>
+import Status from "../Status.vue";
+
+defineProps({
+  isPrivate: Boolean,
+});
+</script>
+
 <template>
   <Status
     :value="!isPrivate"
@@ -5,17 +13,3 @@
     :ko-label="$t('rooms.private')"
   />
 </template>
-
-<script>
-import Status from "../Status";
-
-export default {
-  name: "RoomType",
-
-  components: { Status },
-
-  props: {
-    isPrivate: Boolean,
-  },
-};
-</script>

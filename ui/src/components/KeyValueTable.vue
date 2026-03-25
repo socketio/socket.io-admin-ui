@@ -1,5 +1,21 @@
+<script setup>
+import { computed } from "vue";
+
+const props = defineProps({
+  object: Object,
+});
+
+const items = computed(() => {
+  const keys = Object.keys(props.object);
+  return keys.sort().map((key) => ({
+    key,
+    value: props.object[key],
+  }));
+});
+</script>
+
 <template>
-  <v-simple-table dense>
+  <v-table density="compact">
     <template v-slot:default>
       <thead>
         <tr>
@@ -14,28 +30,8 @@
         </tr>
       </tbody>
     </template>
-  </v-simple-table>
+  </v-table>
 </template>
-
-<script>
-export default {
-  name: "KeyValueTable",
-
-  props: {
-    object: Object,
-  },
-
-  computed: {
-    items() {
-      const keys = Object.keys(this.object);
-      return keys.sort().map((key) => ({
-        key,
-        value: this.object[key],
-      }));
-    },
-  },
-};
-</script>
 
 <style scoped>
 .key-column {
