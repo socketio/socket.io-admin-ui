@@ -320,7 +320,9 @@ const registerVerboseListeners = (
     const clientId = socket.client.id;
 
     const createProxy = (obj: any) => {
-      if (typeof obj !== "object") {
+      // typeof null is object, but null can't be used as a target for Proxy
+      // Ref:https://developer.mozilla.org/docs/Web/JavaScript/Reference/Operators/typeof#typeof_null
+      if (typeof obj !== "object" || obj === null) {
         return obj;
       }
       return new Proxy(obj, {
