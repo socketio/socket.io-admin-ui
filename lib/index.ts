@@ -357,6 +357,9 @@ const registerVerboseListeners = (
     );
 
     socket.conn.on("upgrade", (transport: any) => {
+      if (!socket.data._admin) {
+        socket.data._admin = {};
+      }
       socket.data._admin.transport = transport.name;
       adminNamespace.emit("socket_updated", {
         id: socket.id,
